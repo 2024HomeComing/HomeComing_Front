@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 첫 번째 이미지뷰 (배경) -->
+        <ImageView
+            android:id="@+id/blurImageView"
+            android:src="@drawable/loadingscreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop">
+        </ImageView>
+
+        <!-- 두 번째 이미지뷰 (앞으로 나오는 이미지) -->
+        <ImageView
+            android:id="@+id/loadinlogo"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo">
+        </ImageView>
+
+    </FrameLayout>
+
+</LinearLayout>
