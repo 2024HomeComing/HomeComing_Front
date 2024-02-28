@@ -9,6 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         >
 
         <TextView
@@ -35,7 +36,8 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar" />
+        android:layout_below="@id/toolbar"
+        android:background="@color/white"/>
 
     <!-- 바텀 탭 네비게이션 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -43,7 +45,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
+        android:background="@android:color/white"
+        app:itemBackground="@android:color/transparent"
+        app:itemIconTint="@color/selected_icon_color"
+        app:itemTextColor="@color/selected_icon_color"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>

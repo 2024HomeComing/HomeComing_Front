@@ -3,54 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DashboardFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <!-- fragment_dashboard.xml -->
 
-
-
-    <ScrollView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        >
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 탭 레이아웃 -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_home">
-            </ImageView>
+            android:background="@android:color/white"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:tabTextColor="@android:color/black"
+            app:tabSelectedTextColor="#FFA500"
+            app:tabIndicatorColor="@android:color/black"
+            app:tabIndicatorHeight="4dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="스크롤븁부부ㅜ부부"
-                android:textSize="50dp">
-            </TextView>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_dashboard">
-            </ImageView>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/loginframe">
-            </ImageView>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/loadingscreen">
-            </ImageView>
+        <!-- 프레그먼트 전환을 위한 ViewPager -->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </ScrollView>
 
 </FrameLayout>
