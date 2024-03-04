@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dashboard_tabs.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_missing_report"
+        android:title="실종 신고" />
+    <item
+        android:id="@+id/tab_witness_report"
+        android:title="목격 제보" />
+</menu>
