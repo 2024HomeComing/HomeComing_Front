@@ -17,9 +17,20 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="기간"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/white"/>
+                android:text="글쓰기"
+                android:backgroundTint="@color/black"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="invisible"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="검색 필터"
+                android:backgroundTint="@color/black"/>
 
         </LinearLayout>
 
