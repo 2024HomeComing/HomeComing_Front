@@ -64,6 +64,7 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/edit_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="프로필 수정"
@@ -88,16 +89,16 @@
             android:background="#F2F2F2">
 
             <Button
+                android:id="@+id/make_QR"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="QR코드 관리"
-                android:textAlignment="textStart"
-                android:drawableEnd="@drawable/mypagebtn"
-                android:textColor="@color/black"
-                android:textSize="20sp"
                 android:layout_margin="6dp"
                 android:backgroundTint="@color/white"
-                />
+                android:drawableEnd="@drawable/mypagebtn"
+                android:text="QR코드 관리"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <Button
                 android:layout_width="match_parent"
