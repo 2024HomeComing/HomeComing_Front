@@ -33,7 +33,21 @@ public class MypageFragment extends Fragment {
             }
         });
 
+        // "make_QR" 버튼을 찾아서 클릭 이벤트를 처리합니다.
+        Button makeQRButton = view.findViewById(R.id.make_QR);
+        makeQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // QR 코드 생성 프래그먼트로 전환
+                QRCodeFragment qrCodeFragment = new QRCodeFragment();
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, qrCodeFragment)
+                        .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
+                        .commit();
+            }
+        });
+
         return view;
     }
-
 }
+
