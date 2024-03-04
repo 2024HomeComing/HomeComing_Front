@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileEditFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!-- 이미지뷰 -->
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_weight="0.5"
+                android:src="@drawable/profileimg"
+                android:padding="10dp"/>
+
+            <!-- 버튼 -->
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="사진변경"
+                android:textSize="20dp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아이디"
+                android:textSize="20dp"
+                android:paddingLeft="25dp">
+            </TextView>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="이메일변경"
+                android:textSize="20dp"
+                android:paddingStart="10dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/rounded_edittext_background">
+            </EditText>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닉네임"
+            android:textSize="20dp"
+            android:paddingLeft="25dp">
+        </TextView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <EditText
+                android:layout_gravity="center"
+                android:layout_weight="0.9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="삐삐어디갔노"
+                android:paddingStart="10dp"
+                android:textSize="20dp"
+                android:background="@drawable/rounded_edittext_background"
+                android:layout_margin="20dp">
+            </EditText>
+
+            <Button
+                android:layout_gravity="center"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="중복확인"
+                android:textSize="15dp"></Button>
+        </LinearLayout>
+    </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25dp"
+                android:text="휴대전화"
+                android:textSize="20dp"></TextView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <EditText
+                    android:layout_gravity="center"
+                    android:layout_weight="0.9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="삐삐어디갔노"
+                    android:paddingStart="10dp"
+                    android:textSize="20dp"
+                    android:background="@drawable/rounded_edittext_background"
+                    android:layout_margin="20dp">
+                </EditText>
+
+                <Button
+                    android:layout_weight="0.1"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인증하기"
+                    android:textSize="15dp"></Button>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="소개글"
+            android:textSize="20dp"
+            android:paddingLeft="25dp">
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="top|start"
+            android:text="삐삐어디갔노"
+            android:textSize="20dp"
+            android:paddingStart="10dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:layout_margin="20dp">
+        </EditText>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저장"
+            android:textSize="20dp"
+            android:layout_gravity="right">
+        </Button>
+
+
+    </LinearLayout>
+
+</FrameLayout>
