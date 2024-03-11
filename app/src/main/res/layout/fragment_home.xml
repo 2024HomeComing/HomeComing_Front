@@ -15,12 +15,6 @@
             android:text="Home"
             android:textSize="40dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="60dp"
-            android:text="아 시발 하기 싫다">
-        </TextView>
     </RelativeLayout>
 
 </FrameLayout>
