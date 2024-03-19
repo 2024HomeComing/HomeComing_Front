@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,7 @@ public class MissingReportFragment extends Fragment {
     }
 
     // RecyclerView에 사용될 Adapter 클래스
+    // RecyclerView에 사용될 Adapter 클래스
     private class DisappearanceReportAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         @NonNull
@@ -56,8 +58,21 @@ public class MissingReportFragment extends Fragment {
             int screenWidth = getResources().getDisplayMetrics().widthPixels;
             int cardWidth = screenWidth / 2 - (int) getResources().getDimension(R.dimen.grid_spacing); // 한 줄에 두 개의 아이템을 표시하므로, 간격을 고려하여 계산
             layoutParams.width = cardWidth;
-            layoutParams.height = cardWidth * 3/ 2; // 이미지의 높이는 너비의 두 배로 설정
+            layoutParams.height = cardWidth * 3 / 2; // 이미지의 높이는 너비의 두 배로 설정
             imageView.setLayoutParams(layoutParams);
+
+            // 게시글 클릭 이벤트 설정
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 선택된 게시글을 보여주는 프래그먼트로 이동
+                    Fragment fragment = new PostDetailFragment(); // 선택된 게시글을 보여주는 프래그먼트로 이동
+                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
         }
 
         @Override
@@ -66,6 +81,7 @@ public class MissingReportFragment extends Fragment {
             return 20;
         }
     }
+
 }
 
 

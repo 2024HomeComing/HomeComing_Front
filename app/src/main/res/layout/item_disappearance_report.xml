@@ -18,7 +18,7 @@
             android:id="@+id/CardImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/loadingscreen"
+            android:src="@drawable/cardexample"
             android:scaleType="fitXY"/> <!-- 이미지를 뷰에 맞게 확장 -->
 
         <TextView

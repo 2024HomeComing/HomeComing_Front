@@ -4,15 +4,79 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class WitnessReportFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private WitnessReportAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // 프레그먼트의 UI를 inflate하고 반환합니다.
-        return inflater.inflate(R.layout.fragment_witness_report, container, false);
+        View view = inflater.inflate(R.layout.fragment_witness_report, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 한 줄에 두 개의 아이템을 표시하는 GridLayoutManager 설정
+        adapter = new WitnessReportAdapter();
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
+
+    // RecyclerView에 사용될 Adapter 클래스
+    private class WitnessReportAdapter extends RecyclerView.Adapter<WitnessReportAdapter.ViewHolder> {
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_disappearance_report, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            // 이미지 크기를 변경합니다.
+            ImageView imageView = holder.itemView.findViewById(R.id.CardImg);
+            ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            int cardWidth = screenWidth / 2 - (int) getResources().getDimension(R.dimen.grid_spacing); // 한 줄에 두 개의 아이템을 표시하므로, 간격을 고려하여 계산
+            layoutParams.width = cardWidth;
+            layoutParams.height = cardWidth * 3 / 2; // 이미지의 높이는 너비의 두 배로 설정
+            imageView.setLayoutParams(layoutParams);
+
+            // 게시글 클릭 이벤트 설정
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 선택된 게시글을 보여주는 프래그먼트로 이동
+                    Fragment fragment = new PostDetailFragment(); // 선택된 게시글을 보여주는 프래그먼트로 이동
+                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            // RecyclerView에 표시할 아이템의 개수를 반환합니다. (예시로 20개의 아이템을 반환합니다.)
+            return 20;
+        }
+
+        // RecyclerView의 각 아이템을 위한 ViewHolder 클래스
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
     }
 }
+
