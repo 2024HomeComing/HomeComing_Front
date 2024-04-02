@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ public class MissingReportFragment extends Fragment {
     private RecyclerView recyclerView;
     private DisappearanceReportAdapter adapter;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -26,6 +28,19 @@ public class MissingReportFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 한 줄에 두 개의 아이템을 표시하는 GridLayoutManager 설정
         adapter = new DisappearanceReportAdapter();
         recyclerView.setAdapter(adapter);
+
+        Button writeButton = view.findViewById(R.id.miss_write_btn);
+        writeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // WritingPostFragment로 이동
+                Fragment fragment = new WritingPostFragment();
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         return view;
     }
@@ -37,8 +52,6 @@ public class MissingReportFragment extends Fragment {
         }
     }
 
-    // RecyclerView에 사용될 Adapter 클래스
-    // RecyclerView에 사용될 Adapter 클래스
     private class DisappearanceReportAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         @NonNull
