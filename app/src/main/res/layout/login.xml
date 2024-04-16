@@ -23,6 +23,16 @@
             android:layout_marginTop="200dp">
         </ImageView>
 
+        <ImageButton
+            android:id="@+id/btnnlogin"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/nlogin"
+            android:padding="0dp"
+            tools:ignore="SpeakableTextPresentCheck"/>
+
 
         <ImageButton
             android:id="@+id/btnklogin"

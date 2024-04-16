@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateQrFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="반려동물의 정보를 입력해주세요!"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:textColor="#FFA500"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이름"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="품종"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/species"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="털색"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/hair"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="좋아하는것/싫어하는것"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/favor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사는 지역"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전화번호"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/phone_numb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="메뉴얼"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/menual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:hint="목격자가 동물을 발견 했으때 행동 요령을 알려주세요!"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="50dp">
+                <Button
+                    android:id="@+id/btn_create_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="발급받기"
+                    android:backgroundTint="@color/black">
+                </Button>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

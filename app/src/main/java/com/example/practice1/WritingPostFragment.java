@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link QRCodeFragment#newInstance} factory method to
+ * Use the {@link WritingPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QRCodeFragment extends Fragment {
+public class WritingPostFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +24,7 @@ public class QRCodeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public QRCodeFragment() {
+    public WritingPostFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +34,11 @@ public class QRCodeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment QRCodeFragment.
+     * @return A new instance of fragment WritingPostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QRCodeFragment newInstance(String param1, String param2) {
-        QRCodeFragment fragment = new QRCodeFragment();
+    public static WritingPostFragment newInstance(String param1, String param2) {
+        WritingPostFragment fragment = new WritingPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +59,6 @@ public class QRCodeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_q_r_code, container, false);
+        return inflater.inflate(R.layout.fragment_writing_post, container, false);
     }
 }
