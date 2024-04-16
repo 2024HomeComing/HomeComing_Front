@@ -1,4 +1,4 @@
-package com.example.practice1.Login;
+package com.example.practice1.User;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

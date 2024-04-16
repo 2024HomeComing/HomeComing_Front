@@ -39,7 +39,7 @@ public class MypageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // QR 코드 생성 프래그먼트로 전환
-                QRCodeFragment qrCodeFragment = new QRCodeFragment();
+                CreateQrFragment qrCodeFragment = new CreateQrFragment();
                 getParentFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, qrCodeFragment)
                         .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
