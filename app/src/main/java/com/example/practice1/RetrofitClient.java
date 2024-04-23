@@ -1,11 +1,11 @@
-package com.example.practice1.User;
+package com.example.practice1;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://your_base_url.com/"; // 서버의 기본 URL(서버 도메인 주소)
+    private static final String BASE_URL = "https://homeskyul.store"; // 서버의 기본 URL(서버 도메인 주소)
 
     private static Retrofit retrofit = null;
 

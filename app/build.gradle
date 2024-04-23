@@ -38,6 +38,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.google.code.gson:gson:2.8.8'
 
+    implementation "com.kakao.sdk:v2-user:2.8.3"
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+    implementation 'com.navercorp.nid:oauth:5.9.1' // jdk 11
+    implementation 'com.navercorp.nid:oauth-jdk8:5.9.1' // jdk 8
+    implementation files('libs/oauth-5.9.1.aar')
 
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.android.volley:volley:1.2.1'
