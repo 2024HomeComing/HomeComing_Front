@@ -13,49 +13,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/loginframe"></ImageView>
+            android:src="@drawable/loginframe" />
 
         <ImageView
             android:src="@drawable/logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="200dp">
-        </ImageView>
+            android:layout_marginTop="200dp" />
 
+        <!-- 카카오 로그인 버튼 -->
         <ImageButton
-            android:id="@+id/btnnlogin"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/nlogin"
-            android:padding="0dp"
-            tools:ignore="SpeakableTextPresentCheck"/>
-
-
-        <ImageButton
-            android:id="@+id/btnklogin"
+            android:id="@+id/kakao_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp"
-            android:src="@drawable/klogin"
+            android:src="@drawable/kakao_login_button"
             android:padding="0dp"
-            tools:ignore="SpeakableTextPresentCheck"/>
+            tools:ignore="SpeakableTextPresentCheck" />
 
+        <!-- 네이버 로그인 버튼 -->
         <ImageButton
-            android:id="@+id/btnglogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/btnklogin"
+            android:id="@+id/naver_login_button"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_above="@id/kakao_login_button"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/gloging"
-            android:padding="0dp"
-            tools:ignore="SpeakableTextPresentCheck"/>
+            android:src="@drawable/naver_login_button"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </RelativeLayout>
+
 
 </LinearLayout>
