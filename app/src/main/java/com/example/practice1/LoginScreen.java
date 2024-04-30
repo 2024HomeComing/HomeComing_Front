@@ -1,11 +1,15 @@
 package com.example.practice1;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 
 public class LoginScreen extends AppCompatActivity {
@@ -22,7 +26,7 @@ public class LoginScreen extends AppCompatActivity {
                 if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginScreen.this)) {
                     login();
                 } else {
-                    // 카카오톡이 설치되어 있지 않은 경우 처리
+                    showWebLoginDialog();
                 }
             }
         });
@@ -63,5 +67,28 @@ public class LoginScreen extends AppCompatActivity {
         Intent intent = new Intent(LoginScreen.this, HomeActivity.class);
         startActivity(intent);
         finish(); // 현재 액티비티 종료
+    }
+
+    private void showWebLoginDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("카카오톡이 설치되어 있지 않습니다. 웹 로그인을 하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startWebLogin();
+                    }
+                })
+                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void startWebLogin() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("카카오 웹 로그인 URL"));
+        startActivity(intent);
     }
 }
