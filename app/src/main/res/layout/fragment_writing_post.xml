@@ -15,11 +15,21 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <Button
+            <ImageButton
+                android:id="@+id/postimg"
+                android:src="@drawable/postimg"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="#F0F0F0">
-            </Button>
+            </ImageButton>
+
+            <LinearLayout
+                android:id="@+id/image_container_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/postimg"
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -30,6 +40,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -46,6 +57,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etBreed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -62,6 +74,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -78,6 +91,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etSize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -94,6 +108,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -110,6 +125,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -126,6 +142,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etCharacteristics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -142,6 +159,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etLastSeenLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -158,6 +176,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etLastSeenTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -174,6 +193,7 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -190,12 +210,21 @@
             </TextView>
 
             <EditText
+                android:id="@+id/etAdditionalInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
                 android:textSize="20dp"
                 android:padding="10dp"
                 android:layout_marginHorizontal="20dp"/>
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성 완료"
+                android:textSize="25dp">
+            </Button>
 
         </LinearLayout>
 
