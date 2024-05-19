@@ -29,32 +29,44 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
 
-    implementation 'com.journeyapps:zxing-android-embedded:4.3.0' //qr코드관련
-// Retrofit 관련 의존성 추가
+    // QR 코드 관련 의존성 추가
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    // Retrofit 관련 의존성 추가
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-// OkHttp3 의존성 추가
+
+    // OkHttp3 의존성 추가
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.google.code.gson:gson:2.8.8'
 
+    // 카카오 SDK 관련 의존성 추가
+
     implementation "com.kakao.sdk:v2-user:2.8.3"
+    implementation "com.kakao.sdk:v2-talk:2.8.3" // 이 줄이 Profile 클래스를 포함합니다
 
+    // Glide 의존성 추가
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    // 기타 의존성 추가
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-
-
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // 테스트 의존성 추가
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

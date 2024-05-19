@@ -48,9 +48,10 @@
                             android:gravity="center">
 
                             <TextView
+                                android:id="@+id/profilename"
+                                android:text="user name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="*******님"
                                 android:textSize="30dp"
                                 android:gravity="center_horizontal">
                             </TextView>
