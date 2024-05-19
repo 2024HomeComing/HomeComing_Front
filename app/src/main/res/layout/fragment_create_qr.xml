@@ -83,7 +83,7 @@
             </TextView>
 
             <EditText
-                android:id="@+id/favor"
+                android:id="@+id/like_dislike"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -100,7 +100,7 @@
             </TextView>
 
             <EditText
-                android:id="@+id/area"
+                android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -117,7 +117,7 @@
             </TextView>
 
             <EditText
-                android:id="@+id/phone_numb"
+                android:id="@+id/phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"
@@ -134,7 +134,7 @@
             </TextView>
 
             <EditText
-                android:id="@+id/menual"
+                android:id="@+id/manual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_edittext_bg"

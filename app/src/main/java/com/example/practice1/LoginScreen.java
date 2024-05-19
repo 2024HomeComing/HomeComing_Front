@@ -113,7 +113,7 @@ public class LoginScreen extends AppCompatActivity {
 
         // HTTP 요청 생성
         Request request = new Request.Builder()
-                .url("https://homeskyul.store/api/login/kakao") // 서버 URL 설정
+                .url("https://homeskyul.store/login/kakao") // 서버 URL 설정
                 .post(requestBody)
                 .build();
 

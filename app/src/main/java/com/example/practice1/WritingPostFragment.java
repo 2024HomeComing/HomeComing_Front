@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,7 +154,7 @@ public class WritingPostFragment extends Fragment {
 
     private void sendPostToServer(String title, String breed, String name, String size, String age, String color, String characteristics, String lastSeenLocation, String lastSeenTime, String contact, String additionalInfo, List<String> imageUris) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://yourapiurl.com/") // 서버 주소 변경 필요
+                .baseUrl("http://172.30.1.72:9080/boards") // 서버 주소 변경 필요
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -167,9 +168,11 @@ public class WritingPostFragment extends Fragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     // 성공적으로 전송됨
+                    Log.d("WritingPostFragment", "게시글 작성 성공");
                     Toast.makeText(getActivity(), "게시글 작성이 완료 되었습니다!", Toast.LENGTH_SHORT).show();
                 } else {
                     // 오류 발생
+                    Log.e("WritingPostFragment", "게시글 작성 실패: " + response.code());
                     Toast.makeText(getActivity(), "작성 실패", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -177,10 +180,12 @@ public class WritingPostFragment extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 // 네트워크 오류 발생
-                Toast.makeText(getActivity(), "Network error", Toast.LENGTH_SHORT).show();
+                Log.e("WritingPostFragment", "네트워크 오류: " + t.getMessage(), t);
+                Toast.makeText(getActivity(), "네트워크 오류", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     public interface ApiService {
         @POST("posts")
