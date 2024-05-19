@@ -68,7 +68,7 @@ public class WitnessReportFragment extends Fragment {
         @Override
         public int getItemCount() {
             // RecyclerView에 표시할 아이템의 개수를 반환합니다. (예시로 20개의 아이템을 반환합니다.)
-            return 20;
+            return 5;
         }
 
         // RecyclerView의 각 아이템을 위한 ViewHolder 클래스

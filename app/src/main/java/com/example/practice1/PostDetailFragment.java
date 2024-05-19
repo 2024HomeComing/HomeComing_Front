@@ -65,7 +65,7 @@ public class PostDetailFragment extends Fragment {
 
     private void loadPostContent(int postId) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://yourapiurl.com/") // 서버 주소 변경 필요
+                .baseUrl("http://172.30.1.72:9080/boards") // 서버 주소 변경 필요
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

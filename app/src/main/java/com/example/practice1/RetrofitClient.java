@@ -9,7 +9,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = null;
 
-    public static ApiService getApiService() {
+    public static PostDetailFragment.ApiService getApiService() {
         if (retrofit == null) {
             // Retrofit 인스턴스 생성
             retrofit = new Retrofit.Builder()
@@ -19,6 +19,6 @@ public class RetrofitClient {
         }
 
         // ApiService 인터페이스 구현체 반환
-        return retrofit.create(ApiService.class);
+        return retrofit.create(PostDetailFragment.ApiService.class);
     }
 }
