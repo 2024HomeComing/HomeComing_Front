@@ -1,7 +1,10 @@
 package com.example.practice1;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,9 @@ import com.kakao.sdk.user.UserApiClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -70,11 +75,10 @@ public class CreateQrFragment extends Fragment {
                         jsonObject.put("likeDislike", likeDislike);
                         jsonObject.put("phoneNumber", phoneNumber);
                         jsonObject.put("manual", manual);
-
                         // 카카오 user id 추가
-                        String kakaoUserId = getKakaoUserId(); // 카카오 SDK를 사용하여 user id 가져오기
-                        jsonObject.put("kakaoUserId", kakaoUserId);
-
+                        String userId = UserManager.getInstance().getUserId();
+                        jsonObject.put("userId", userId);
+                        Log.i(TAG, "저장된 사용자 아이디: " + userId);
                         sendUserDataToServer(jsonObject.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -85,37 +89,17 @@ public class CreateQrFragment extends Fragment {
         return view;
     }
 
-    private String getKakaoUserId() {
-        String[] kakaoUserId = {null};
-        UserApiClient.getInstance().me((user, error) -> {
-            if (error != null) {
-                // 사용자 정보 가져오기 실패
-                return null;
-            } else {
-                // 사용자 정보 가져오기 성공
-                kakaoUserId[0] = user.getId() + "";
-                return null;
-            }
-        });
-        return kakaoUserId[0];
-    }
 
     private void sendUserDataToServer(String jsonData) {
         // AsyncTask를 사용하여 백그라운드에서 데이터를 서버로 전송
         new SendDataToServerTask().execute(jsonData);
     }
 
-    // AsyncTask를 사용하여 백그라운드에서 데이터를 서버로 전송
-    // CreateQrFragment.java
-
-    // AsyncTask를 사용하여 백그라운드에서 데이터를 서버로 전송
-    private class SendDataToServerTask extends AsyncTask<String, Void, String> {
+    private class SendDataToServerTask extends AsyncTask<String, Void, byte[]> {
         @Override
-        protected String doInBackground(String... params) {
+        protected byte[] doInBackground(String... params) {
             String jsonData = params[0];
-            String qrImageUrl = null;
-
-            // 서버 URL
+            byte[] qrImage = null;
             String serverUrl = "https://homeskyul.store/api/qr/generate";
 
             try {
@@ -125,46 +109,47 @@ public class CreateQrFragment extends Fragment {
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setDoOutput(true);
 
-                // 데이터 전송
                 OutputStream os = urlConnection.getOutputStream();
                 os.write(jsonData.getBytes());
                 os.flush();
                 os.close();
 
-                // 응답 코드 확인
                 int responseCode = urlConnection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // 응답 데이터를 읽어서 qrImageUrl 설정
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
+                if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                    BufferedInputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    int read;
+                    byte[] buffer = new byte[1024];
+                    while ((read = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, read);
                     }
-                    reader.close();
-
-                    // response에서 qrImageUrl 추출
-                    JSONObject jsonResponse = new JSONObject(response.toString());
-                    qrImageUrl = jsonResponse.getString("qr_image_url");
+                    qrImage = outputStream.toByteArray();
+                    inputStream.close();
+                    outputStream.close();
                 }
-            } catch (IOException | JSONException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            return qrImageUrl;
+            return qrImage;
         }
 
         @Override
-        protected void onPostExecute(String qrImageUrl) {
-            // GetQrFragment로 이동하여 QR 코드 이미지 표시
-            GetQrFragment getQrFragment = new GetQrFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("qr_image_url", qrImageUrl);
-            getQrFragment.setArguments(bundle);
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, getQrFragment)
-                    .addToBackStack(null)
-                    .commit();
+        protected void onPostExecute(byte[] qrImage) {
+            if (qrImage != null) {
+                Bundle bundle = new Bundle();
+                bundle.putByteArray("qr_image", qrImage);
+
+                QRFragment qrFragment = new QRFragment();
+                qrFragment.setArguments(bundle);
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, qrFragment)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Toast.makeText(getActivity(), "QR 코드 생성에 실패했습니다.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
