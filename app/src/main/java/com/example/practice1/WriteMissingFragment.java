@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public class WritingPostFragment extends Fragment {
+public class WriteMissingFragment extends Fragment {
 
     private static final int GALLERY_REQUEST_CODE = 1;
     private static final int MAX_IMAGE_SELECTION = 5; // 최대 이미지 선택 개수
@@ -44,7 +45,7 @@ public class WritingPostFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_writing_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_write_miss, container, false);
 
         ImageButton btnOpenGallery = view.findViewById(R.id.postimg);
         btnOpenGallery.setOnClickListener(new View.OnClickListener() {

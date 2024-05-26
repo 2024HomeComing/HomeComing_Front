@@ -13,6 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="50dp"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
@@ -91,6 +92,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
+                android:paddingBottom="40dp"
                 android:background="#F2F2F2">
 
                 <TextView
@@ -100,7 +102,7 @@
                 </TextView>
 
                 <Button
-                    android:id="@+id/make_QR"
+                    android:id="@+id/manage_qr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="QR코드 관리"
@@ -125,6 +127,7 @@
                     />
 
                 <Button
+                    android:id="@+id/report_for_me"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="신고 접수 현황"
@@ -137,6 +140,7 @@
                     />
 
                 <Button
+                    android:id="@+id/logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="로그아웃"

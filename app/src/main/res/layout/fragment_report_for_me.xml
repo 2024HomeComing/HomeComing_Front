@@ -3,26 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QrCode.QRFragment">
+    tools:context=".ReportForMe">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
-        <ImageView
-            android:id="@+id/qr_image_view"
-            android:layout_width="360dp"
-            android:layout_height="360dp"
-            android:layout_gravity="center_horizontal"
-            android:padding="20dp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="신고 접수 현황"
+            android:textSize="30dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="생성된 QR코드를 캡쳐 하세요!"
-            android:textSize="30dp"
-            android:layout_gravity="center">
+            android:textSize="20dp"
+            android:text="여기서 다른 사람이 보내준 내 반려 동물 신고를 받아보세요!">
         </TextView>
+
     </LinearLayout>
+
 </FrameLayout>

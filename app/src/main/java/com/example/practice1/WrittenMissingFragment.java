@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public class PostDetailFragment extends Fragment {
+public class WrittenMissingFragment extends Fragment {
 
     private TextView titleTextView;
     private ImageView petImageView;
@@ -40,7 +40,7 @@ public class PostDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_written_missing, container, false);
 
         // UI 요소 초기화
         titleTextView = view.findViewById(R.id.titleTextView);

@@ -1,7 +1,7 @@
 package com.example.practice1;
 
+import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,20 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import com.kakao.sdk.auth.model.OAuthToken;
-import com.kakao.sdk.common.util.Utility;
-import com.kakao.sdk.talk.TalkApiClient;
+import android.widget.Toast;
+
 import com.kakao.sdk.user.UserApiClient;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
 
 public class MypageFragment extends Fragment {
 
     private static final String TAG = "MypageFragment";
-
-    public MypageFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,18 +51,48 @@ public class MypageFragment extends Fragment {
                     .commit();
         });
 
-        // "make_QR" 버튼 클릭 이벤트 처리
-        Button makeQRButton = view.findViewById(R.id.make_QR);
-        makeQRButton.setOnClickListener(v -> {
+        // "manage_qr" 버튼 클릭 이벤트 처리
+        Button manageQRButton = view.findViewById(R.id.manage_qr);
+        manageQRButton.setOnClickListener(v -> {
             // QR 코드 생성 프래그먼트로 전환
-            CreateQrFragment qrCodeFragment = new CreateQrFragment();
+            MyQrFragment myQrFragment = new MyQrFragment();
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, qrCodeFragment)
+                    .replace(R.id.fragment_container, myQrFragment)
+                    .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
+                    .commit();
+        });
+
+        // "로그아웃" 버튼 클릭 이벤트 처리
+        Button logoutButton = view.findViewById(R.id.logout);
+        logoutButton.setOnClickListener(v -> {
+            UserApiClient.getInstance().logout(error -> {
+                if (error != null) {
+                    Log.e(TAG, "로그아웃 실패", error);
+                    Toast.makeText(getContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i(TAG, "로그아웃 성공");
+                    Toast.makeText(getContext(), "로그아웃 성공", Toast.LENGTH_SHORT).show();
+                    // 로그아웃 후 로그인 화면으로 이동
+                    Intent intent = new Intent(getContext(), LoginScreen.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+                return null;
+            });
+        });
+
+        // "report_for_me" 버튼 클릭 이벤트 처리
+        Button reportForMeButton = view.findViewById(R.id.report_for_me);
+        reportForMeButton.setOnClickListener(v -> {
+            // ReportforMeFragment로 전환
+            ReportForMe reportForMeFragment = new ReportForMe();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, reportForMeFragment)
                     .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
                     .commit();
         });
 
         return view;
     }
-
 }

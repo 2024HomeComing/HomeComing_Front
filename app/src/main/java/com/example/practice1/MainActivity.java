@@ -8,7 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.kakao.sdk.auth.AuthApiClient;
+import com.kakao.sdk.user.UserApiClient;
+
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,18 +40,34 @@ public class MainActivity extends AppCompatActivity {
         // 배경 이미지 가져오기 (블러 처리 적용)
         new LoadBlurryBackgroundTask(blurImageView).execute(R.drawable.loadingscreen);
 
-        // Delay for 3 seconds before transitioning to LoginScreen
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Intent로 LoginActivity 시작
-                Intent intent = new Intent(MainActivity.this, LoginScreen.class);
-                startActivity(intent);
-
-                // Optional: Close the current activity if needed
-                // finish();  // 주석 처리 또는 삭제
-            }
+        // Delay for 3 seconds before transitioning to HomeActivity if user is logged in
+        new Handler().postDelayed(() -> {
+            // Check if user is logged in
+            checkLoginStatusAndNavigate();
         }, DELAY_TIME_MILLIS);
+    }
+
+    private void checkLoginStatusAndNavigate() {
+        // 카카오 SDK를 이용하여 로그인 상태 확인
+        if (AuthApiClient.getInstance().hasToken()) {
+            // 사용자가 로그인된 상태
+            navigateToHomeActivity();
+        } else {
+            // 사용자가 로그인되지 않은 상태
+            navigateToLoginActivity();
+        }
+    }
+
+    private void navigateToHomeActivity() {
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void navigateToLoginActivity() {
+        Intent intent = new Intent(MainActivity.this, LoginScreen.class);
+        startActivity(intent);
+        finish();
     }
 
     private static class LoadBlurryBackgroundTask extends AsyncTask<Integer, Void, Bitmap> {
@@ -73,5 +95,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 }

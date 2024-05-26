@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostDetailFragment"
+    tools:context=".WrittenMissingFragment"
     android:layout_marginBottom="50dp">
 
     <ScrollView
@@ -19,7 +19,7 @@
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="게시글 상세 페이지"
+                android:text="실종신고 게시글 상세 페이지"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:padding="16dp"

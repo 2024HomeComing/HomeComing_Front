@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
 public class QRFragment extends Fragment {
     private ImageView qrImageView;
     @Nullable
