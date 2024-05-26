@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 public class WitnessReportFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -56,7 +57,7 @@ public class WitnessReportFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // 선택된 게시글을 보여주는 프래그먼트로 이동
-                    Fragment fragment = new PostDetailFragment(); // 선택된 게시글을 보여주는 프래그먼트로 이동
+                    Fragment fragment = new WrittenMissingFragment(); // 선택된 게시글을 보여주는 프래그먼트로 이동
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.addToBackStack(null);
