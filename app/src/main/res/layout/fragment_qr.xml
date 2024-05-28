@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QrCode.QRFragment">
+    tools:context="QRFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,5 +24,14 @@
             android:textSize="30dp"
             android:layout_gravity="center">
         </TextView>
+
+        <Button
+            android:id="@+id/createsuc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="완료"
+            android:textSize="25dp"
+            android:backgroundTint="@color/black">
+        </Button>
     </LinearLayout>
 </FrameLayout>
