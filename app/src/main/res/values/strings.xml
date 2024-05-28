@@ -5,4 +5,6 @@
     <string name="social_login_info_naver_client_id">QLUy0M1kJqz7mYHdR1A4</string>
     <string name="social_login_info_naver_client_secret">QLUy0M1kJqz7mYHdR1A4</string>
     <string name="social_login_info_naver_client_name">homecoming</string>
+    <string name="api_url">http://apis.data.go.kr/1543061/animalShelterSrvc</string>
+    <string name="api_key">j%2F5Nr278ZWTr9lpmEKCv4NpP%2Fz9t1oJIfgjq0rnvLBp6%2FESm3IwArDLeKR13Gsr2xDkFY0vGNpoYwn39JxvlqQ%3D%3D</string>
 </resources>

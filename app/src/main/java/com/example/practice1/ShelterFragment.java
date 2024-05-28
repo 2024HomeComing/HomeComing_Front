@@ -2,9 +2,8 @@ package com.example.practice1;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-
 import android.os.Bundle;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,23 +29,24 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShelterFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "ShelterFragment";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final int SEARCH_RADIUS = 500; // 검색 반경 (미터)
+    private static final int SEARCH_RADIUS = 900000000; // 검색 반경 (미터)
     private GoogleMap mMap;
 
     // 현재 위치 좌표
     private LatLng currentLocation;
-
-    // 검색할 위치 좌표들
-    private LatLng[] targetLocations = {
-            new LatLng(37.479903166118596, 126.97405570294899),
-            new LatLng(37.47993320911465, 126.97320770558225),
-            new LatLng(37.478847211197746, 126.97213415987609),
-            new LatLng(37.48466628708502, 126.98161125183105)
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,15 +102,87 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15)); // 15는 줌 레벨, 1~20까지 가능
                         mMap.addMarker(new MarkerOptions().position(currentLocation).title("내 위치"));
 
-                        // 현재 위치로부터 검색 반경 내에 있는 위치들에 마커 추가
-                        for (LatLng targetLocation : targetLocations) {
-                            double distance = getDistance(currentLocation.latitude, currentLocation.longitude, targetLocation.latitude, targetLocation.longitude);
+                        // API 호출하여 보호소 데이터 가져오기
+                        fetchShelterData();
+                    }
+                });
+    }
+
+    private void fetchShelterData() {
+        String apiUrl = getString(R.string.api_url);
+        String apiKey = getString(R.string.api_key);
+        String url = apiUrl + "?serviceKey=" + apiKey + "&numOfRows=10&pageNo=1";
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "API Response: " + response); // API 호출 성공 로그
+                        List<Shelter> shelters = parseXML(response);
+                        for (Shelter shelter : shelters) {
+                            LatLng shelterLocation = new LatLng(Double.parseDouble(shelter.lat), Double.parseDouble(shelter.lng));
+                            double distance = getDistance(currentLocation.latitude, currentLocation.longitude, shelterLocation.latitude, shelterLocation.longitude);
                             if (distance <= SEARCH_RADIUS) {
-                                mMap.addMarker(new MarkerOptions().position(targetLocation).title("검색된 위치").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                                mMap.addMarker(new MarkerOptions().position(shelterLocation).title(shelter.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
                             }
                         }
                     }
-                });
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error != null && error.networkResponse != null && error.networkResponse.data != null) {
+                    String errorMsg = new String(error.networkResponse.data);
+                    Log.e(TAG, "API Error: " + errorMsg);
+                } else {
+                    Log.e(TAG, "API Error: Unknown error occurred");
+                }
+// API 호출 실패 로그
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
+    private List<Shelter> parseXML(String xml) {
+        List<Shelter> shelters = new ArrayList<>();
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(new StringReader(xml));
+            int eventType = parser.getEventType();
+            Shelter currentShelter = null;
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                String tagName = parser.getName();
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        if (tagName.equalsIgnoreCase("item")) {
+                            currentShelter = new Shelter();
+                        } else if (currentShelter != null) {
+                            if (tagName.equalsIgnoreCase("careNm")) {
+                                currentShelter.name = parser.nextText();
+                            } else if (tagName.equalsIgnoreCase("careAddr")) {
+                                currentShelter.address = parser.nextText();
+                            } else if (tagName.equalsIgnoreCase("lat")) {
+                                currentShelter.lat = parser.nextText();
+                            } else if (tagName.equalsIgnoreCase("lng")) {
+                                currentShelter.lng = parser.nextText();
+                            }
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (tagName.equalsIgnoreCase("item") && currentShelter != null) {
+                            shelters.add(currentShelter);
+                        }
+                        break;
+                }
+                eventType = parser.next();
+            }
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
+        return shelters;
     }
 
     private double getDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -132,5 +210,12 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
                 requireActivity().finish();
             }
         }
+    }
+
+    static class Shelter {
+        String name;
+        String address;
+        String lat;
+        String lng;
     }
 }
