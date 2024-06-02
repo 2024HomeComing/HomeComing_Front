@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ShelterFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,38 +13,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="16dp">
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="검색기능 넣을 자리"
-                android:textSize="30dp">
-            </EditText>
-
-            <View
+                android:id="@+id/searchEditText"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:visibility="invisible"/>
-
+                android:hint="검색어를 입력하세요"
+                android:textSize="16sp"/>
             <Button
+                android:id="@+id/searchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:text="검색"
                 android:backgroundTint="@color/white"
-                android:textColor="@color/black">
-            </Button>
-
+                android:textColor="@color/black"/>
         </LinearLayout>
 
-    <!-- TODO: Update blank fragment layout -->
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
-
 </FrameLayout>

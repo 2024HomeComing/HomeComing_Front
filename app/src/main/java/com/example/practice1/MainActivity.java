@@ -6,15 +6,17 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kakao.sdk.auth.AuthApiClient;
-import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.auth.model.OAuthToken;
 
-import java.util.concurrent.ExecutionException;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,11 +53,34 @@ public class MainActivity extends AppCompatActivity {
         // 카카오 SDK를 이용하여 로그인 상태 확인
         if (AuthApiClient.getInstance().hasToken()) {
             // 사용자가 로그인된 상태
-            navigateToHomeActivity();
+            refreshAccessTokenAndNavigate();
         } else {
             // 사용자가 로그인되지 않은 상태
             navigateToLoginActivity();
         }
+    }
+
+    private void refreshAccessTokenAndNavigate() {
+        // 토큰 갱신 요청
+        AuthApiClient.getInstance().refreshAccessToken(
+                new Function2<OAuthToken, Throwable, Unit>() {
+                    @Override
+                    public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
+                        // 토큰 갱신 성공
+                        if (throwable == null) {
+                            navigateToHomeActivity();
+                            // 로그 출력
+                            Log.d("Token Refresh", "토큰 갱신 성공");
+                        } else {
+                            // 토큰 갱신 실패
+                            navigateToLoginActivity(); // 예시로 로그인 화면으로 이동하는 처리를 함
+                            // 로그 출력
+                            Log.d("Token Refresh", "토큰 갱신 실패");
+                        }
+                        return null;
+                    }
+                }
+        );
     }
 
     private void navigateToHomeActivity() {
