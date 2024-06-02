@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +43,7 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "ShelterFragment";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final int SEARCH_RADIUS = 900000000; // 검색 반경 (미터)
+    private static final int SEARCH_RADIUS = 1000000; // 검색 반경 (미터)
     private GoogleMap mMap;
 
     // 현재 위치 좌표
@@ -75,10 +76,11 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void showMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
+        } else {
+            Log.e(TAG, "MapFragment is null");
         }
     }
 
@@ -87,7 +89,7 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            requestLocationPermission();
             return;
         }
         mMap.setMyLocationEnabled(true);
@@ -103,15 +105,60 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
                         mMap.addMarker(new MarkerOptions().position(currentLocation).title("내 위치"));
 
                         // API 호출하여 보호소 데이터 가져오기
-                        fetchShelterData();
+                        fetchTotalCountAndShelterData();
+                    } else {
+                        Log.e(TAG, "Location is null");
                     }
-                });
+                }).addOnFailureListener(e -> Log.e(TAG, "Failed to get location", e));
     }
 
-    private void fetchShelterData() {
+
+    private void fetchTotalCountAndShelterData() {
         String apiUrl = getString(R.string.api_url);
         String apiKey = getString(R.string.api_key);
-        String url = apiUrl + "?serviceKey=" + apiKey + "&numOfRows=10&pageNo=1";
+        String url = apiUrl + "?serviceKey=" + apiKey + "&numOfRows=1&pageNo=1"; // 전체 결과 수만 가져오기 위해 numOfRows=1
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        int totalCount = parseTotalCount(response);
+                        fetchAllShelterData(totalCount);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "API Error: " + error.getMessage());
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
+    private int parseTotalCount(String xml) {
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(new StringReader(xml));
+            int eventType = parser.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                String tagName = parser.getName();
+                if (eventType == XmlPullParser.START_TAG && tagName.equalsIgnoreCase("totalCount")) {
+                    return Integer.parseInt(parser.nextText());
+                }
+                eventType = parser.next();
+            }
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private void fetchAllShelterData(int totalCount) {
+        String apiUrl = getString(R.string.api_url);
+        String apiKey = getString(R.string.api_key);
+        String url = apiUrl + "?serviceKey=" + apiKey + "&numOfRows=" + totalCount + "&pageNo=1";
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -120,12 +167,20 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
                     public void onResponse(String response) {
                         Log.d(TAG, "API Response: " + response); // API 호출 성공 로그
                         List<Shelter> shelters = parseXML(response);
-                        for (Shelter shelter : shelters) {
-                            LatLng shelterLocation = new LatLng(Double.parseDouble(shelter.lat), Double.parseDouble(shelter.lng));
-                            double distance = getDistance(currentLocation.latitude, currentLocation.longitude, shelterLocation.latitude, shelterLocation.longitude);
-                            if (distance <= SEARCH_RADIUS) {
-                                mMap.addMarker(new MarkerOptions().position(shelterLocation).title(shelter.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                        Log.d(TAG, "Parsed shelters: " + shelters); // 파싱된 데이터 로그
+                        if (shelters != null && shelters.size() > 0) {
+                            for (Shelter shelter : shelters) {
+                                if (shelter.lat != null && shelter.lng != null) { // 위치 데이터가 있는 경우에만 처리
+                                    LatLng shelterLocation = new LatLng(Double.parseDouble(shelter.lat), Double.parseDouble(shelter.lng));
+                                    double distance = getDistance(currentLocation.latitude, currentLocation.longitude, shelterLocation.latitude, shelterLocation.longitude);
+                                    Log.d(TAG, "Shelter: " + shelter.name + ", Distance: " + distance); // 거리 계산 로그
+                                    if (distance <= SEARCH_RADIUS) {
+                                        mMap.addMarker(new MarkerOptions().position(shelterLocation).title(shelter.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                                    }
+                                }
                             }
+                        } else {
+                            Log.e(TAG, "No shelter data found");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -137,7 +192,6 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
                 } else {
                     Log.e(TAG, "API Error: Unknown error occurred");
                 }
-// API 호출 실패 로그
             }
         });
 
@@ -202,11 +256,9 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                if (mapFragment != null) {
-                    mapFragment.getMapAsync(this);
-                }
+                showMap(); // 권한이 허용되면 지도를 초기화
             } else {
+                Toast.makeText(requireContext(), "Location permission is required", Toast.LENGTH_SHORT).show();
                 requireActivity().finish();
             }
         }
