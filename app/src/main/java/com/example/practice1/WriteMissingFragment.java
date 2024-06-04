@@ -1,5 +1,6 @@
 package com.example.practice1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,6 +20,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WriteMissingFragment extends Fragment {
 
+    private Context context;
     private static final int GALLERY_REQUEST_CODE = 1;
     private static final int MAX_IMAGE_SELECTION = 5;
     private List<Uri> selectedImageUris = new ArrayList<>();
@@ -41,6 +48,12 @@ public class WriteMissingFragment extends Fragment {
     private int imageWidth;
 
     private EditText title, breed, name, size, age, color, characteristics, lastSeenLocation, lastSeenTime, contact, additionalInfo;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context=context;
+    }
 
     @Nullable
     @Override
@@ -122,19 +135,37 @@ public class WriteMissingFragment extends Fragment {
         }
     }
 
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(columnIndex);
+            cursor.close();
+            return path;
+        }
+        return null;
+    }
+
     private void submitPost() {
         try {
-            String titleText = title.getText().toString();
-            String breedText = breed.getText().toString();
-            String nameText = name.getText().toString();
-            String sizeText = size.getText().toString();
-            String ageText = age.getText().toString();
-            String colorText = color.getText().toString();
-            String characteristicsText = characteristics.getText().toString();
-            String lastSeenLocationText = lastSeenLocation.getText().toString();
-            String lastSeenTimeText = lastSeenTime.getText().toString();
-            String contactText = contact.getText().toString();
-            String additionalInfoText = additionalInfo.getText().toString();
+            JSONObject boardJson = new JSONObject();
+            boardJson.put("title", title.getText().toString());
+            boardJson.put("breed", breed.getText().toString());
+            boardJson.put("name", name.getText().toString());
+            boardJson.put("size", size.getText().toString());
+            boardJson.put("age", age.getText().toString());
+            boardJson.put("color", color.getText().toString());
+            boardJson.put("characteristics", characteristics.getText().toString());
+            boardJson.put("lastSeenLocation", lastSeenLocation.getText().toString());
+            boardJson.put("lastSeenTime", lastSeenTime.getText().toString());
+            boardJson.put("contact", contact.getText().toString());
+            boardJson.put("additionalInfo", additionalInfo.getText().toString());
+            String userId = SingletonClass.getInstance().getUserId();
+            boardJson.put("userId", userId);
+
+            RequestBody boardPart = RequestBody.create(MediaType.parse("application/json"), boardJson.toString());
 
             List<MultipartBody.Part> imageParts = new ArrayList<>();
             for (Uri uri : selectedImageUris) {
@@ -149,54 +180,28 @@ public class WriteMissingFragment extends Fragment {
                 }
             }
 
-            String kakaoId = "123456789";
-            sendPostToServer(titleText, breedText, nameText, sizeText, ageText, colorText, characteristicsText, lastSeenLocationText, lastSeenTimeText, contactText, additionalInfoText, kakaoId, imageParts);
+            sendPostToServer(boardPart, imageParts);
         } catch (Exception e) {
             Log.e("WriteMissingFragment", "submitPost: 오류 발생", e);
             Toast.makeText(getActivity(), "오류 발생: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private String getRealPathFromURI(Uri contentUri) {
-        String filePath = null;
-        String[] filePathColumn = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getActivity().getContentResolver().query(contentUri, filePathColumn, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            filePath = cursor.getString(columnIndex);
-            cursor.close();
-        }
-        return filePath;
-    }
-
-    private void sendPostToServer(String title, String breed, String name, String size, String age, String color, String characteristics, String lastSeenLocation, String lastSeenTime, String contact, String additionalInfo, String kakaoId, List<MultipartBody.Part> image) {
+    private void sendPostToServer(RequestBody boardPart, List<MultipartBody.Part> imageParts) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://homeskyul.store/boards/") // 서버 주소 변경 필요
+                .baseUrl("https://homeskyul.store/boards/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
 
-        RequestBody titlePart = RequestBody.create(MediaType.parse("text/plain"), title);
-        RequestBody breedPart = RequestBody.create(MediaType.parse("text/plain"), breed);
-        RequestBody namePart = RequestBody.create(MediaType.parse("text/plain"), name);
-        RequestBody sizePart = RequestBody.create(MediaType.parse("text/plain"), size);
-        RequestBody agePart =         RequestBody.create(MediaType.parse("text/plain"), age);
-        RequestBody colorPart = RequestBody.create(MediaType.parse("text/plain"), color);
-        RequestBody characteristicsPart = RequestBody.create(MediaType.parse("text/plain"), characteristics);
-        RequestBody lastSeenLocationPart = RequestBody.create(MediaType.parse("text/plain"), lastSeenLocation);
-        RequestBody lastSeenTimePart = RequestBody.create(MediaType.parse("text/plain"), lastSeenTime);
-        RequestBody contactPart = RequestBody.create(MediaType.parse("text/plain"), contact);
-        RequestBody additionalInfoPart = RequestBody.create(MediaType.parse("text/plain"), additionalInfo);
-        RequestBody kakaoIdPart = RequestBody.create(MediaType.parse("text/plain"), kakaoId);
-
-        Call<ResponseBody> call = apiService.createPost(titlePart, breedPart, namePart, sizePart, agePart, colorPart, characteristicsPart, lastSeenLocationPart, lastSeenTimePart, contactPart, additionalInfoPart, kakaoIdPart, image);
+        Call<ResponseBody> call = apiService.createPost(boardPart, imageParts);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d("WriteMissingFragment", "sendPostToServer: 게시글 작성 성공");
                     Toast.makeText(getActivity(), "게시글 작성이 완료 되었습니다!", Toast.LENGTH_SHORT).show();
+                    navigateToMissingReportFragment();
                 } else {
                     Log.e("WriteMissingFragment", "sendPostToServer: 게시글 작성 실패 - " + response.message());
                     Toast.makeText(getActivity(), "게시글 작성에 실패하였습니다.", Toast.LENGTH_SHORT).show();
@@ -210,4 +215,14 @@ public class WriteMissingFragment extends Fragment {
             }
         });
     }
+    private void navigateToMissingReportFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new MissingReportFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
 }
