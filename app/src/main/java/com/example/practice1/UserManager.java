@@ -1,27 +1,21 @@
 package com.example.practice1;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 public class UserManager {
-    private static UserManager instance;
-    private String userId;
+    private static final String PREF_NAME = "user_pref";
+    private static final String KEY_ID = "userId";
 
-    // private 생성자로 외부에서 인스턴스 생성을 막음
-    private UserManager() {}
-
-    // 싱글톤 인스턴스를 반환하는 메서드
-    public static synchronized UserManager getInstance() {
-        if (instance == null) {
-            instance = new UserManager();
-        }
-        return instance;
+    public static void saveUserId(Context context, String userId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_ID, userId);
+        editor.apply();
     }
 
-    // 사용자 아이디 저장 메서드
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    // 사용자 아이디 반환 메서드
-    public String getUserId() {
-        return userId;
+    public static String getUserId(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(KEY_ID, null);
     }
 }

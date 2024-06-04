@@ -39,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         // 두 번째 ImageView에는 블러 처리하지 않은 로고 이미지 설정
         loadinLogoImageView.setImageBitmap(originalLogoBitmap);
 
+        //앱 실행시 프리펀스에서 싱글톤으로 아이디 적재
+        String userId = UserManager.getUserId(getApplicationContext());
+        if (userId != null) {
+            SingletonClass.getInstance().setUserId(userId);
+        }
+
         // 배경 이미지 가져오기 (블러 처리 적용)
         new LoadBlurryBackgroundTask(blurImageView).execute(R.drawable.loadingscreen);
 
