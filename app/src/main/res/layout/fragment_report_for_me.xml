@@ -23,6 +23,7 @@
             android:text="여기서 다른 사람이 보내준 내 반려 동물 신고를 받아보세요!">
         </TextView>
 
+
     </LinearLayout>
 
 </FrameLayout>
