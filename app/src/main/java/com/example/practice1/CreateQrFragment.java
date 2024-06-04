@@ -73,7 +73,7 @@ public class CreateQrFragment extends Fragment {
                         jsonObject.put("phoneNumber", phoneNumber);
                         jsonObject.put("manual", manual);
                         // 카카오 user id 추가
-                        String userId = UserManager.getInstance().getUserId();
+                        String userId = SingletonClass.getInstance().getUserId();
                         jsonObject.put("userId", userId);
                         Log.i(TAG, "저장된 사용자 아이디: " + userId);
                         sendUserDataToServer(jsonObject.toString());

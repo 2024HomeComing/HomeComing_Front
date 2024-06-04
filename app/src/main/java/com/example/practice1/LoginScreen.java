@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import com.kakao.sdk.auth.model.OAuthToken;
+
 import com.kakao.sdk.user.UserApiClient;
 
 import java.io.IOException;
@@ -91,8 +91,9 @@ public class LoginScreen extends AppCompatActivity {
                 Log.i(TAG, "사용자 전화번호: " + user.getKakaoAccount().getPhoneNumber());
                 Log.i(TAG, "사용자 이메일: " + user.getKakaoAccount().getEmail());
 
-                // 싱글톤 객체에 사용자 아이디 저장
-                UserManager.getInstance().setUserId(String.valueOf(user.getId()));
+                // 쉐얼드 프리펀스에 사용자 아이디 저장
+                UserManager.saveUserId(getApplicationContext(), String.valueOf(user.getId()));
+                Log.i(TAG,"SharedPreference에 아이디 저장됨.");
 
                 // 서버로 사용자 정보 전송
                 sendUserInfoToServer(String.valueOf(user.getId()), user.getKakaoAccount().getPhoneNumber(), user.getKakaoAccount().getName(), user.getKakaoAccount().getEmail());
