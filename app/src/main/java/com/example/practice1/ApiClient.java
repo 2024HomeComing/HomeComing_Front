@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "https://homeskyul.store/api/qr/generate/";
+    private static final String BASE_URL = "https://homeskyul.store/api/";
 
     public static ApiService createService() {
         Retrofit retrofit = new Retrofit.Builder()
