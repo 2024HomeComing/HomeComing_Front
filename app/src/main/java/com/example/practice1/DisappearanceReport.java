@@ -72,4 +72,3 @@ public class DisappearanceReport {
         return additionalInfo;
     }
 }
-

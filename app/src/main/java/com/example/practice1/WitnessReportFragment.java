@@ -37,14 +37,14 @@ public class WitnessReportFragment extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_disappearance_report, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_witness_report, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             // 이미지 크기를 변경합니다.
-            ImageView imageView = holder.itemView.findViewById(R.id.CardImg);
+            ImageView imageView = holder.itemView.findViewById(R.id.WCardImg);
             ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
             int screenWidth = getResources().getDisplayMetrics().widthPixels;
             int cardWidth = screenWidth / 2 - (int) getResources().getDimension(R.dimen.grid_spacing); // 한 줄에 두 개의 아이템을 표시하므로, 간격을 고려하여 계산

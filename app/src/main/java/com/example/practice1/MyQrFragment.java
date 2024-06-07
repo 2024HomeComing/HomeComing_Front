@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 
-
 import com.kakao.sdk.user.UserApiClient;
 import java.util.List;
 

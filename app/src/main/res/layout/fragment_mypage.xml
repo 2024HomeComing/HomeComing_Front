@@ -115,6 +115,7 @@
                     />
 
                 <Button
+                    android:id="@+id/manage_report"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="나의 게시글"

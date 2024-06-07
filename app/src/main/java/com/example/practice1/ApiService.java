@@ -21,19 +21,7 @@ public interface ApiService {
     @Multipart
     @POST("/boards") // 실제 서버의 엔드포인트로 변경 필요
     Call<ResponseBody> createPost(
-            @Part("title") RequestBody title,
-            @Part("breed") RequestBody breed,
-            @Part("name") RequestBody name,
-            @Part("size") RequestBody size,
-            @Part("age") RequestBody age,
-            @Part("color") RequestBody color,
-            @Part("characteristics") RequestBody characteristics,
-            @Part("lastSeenLocation") RequestBody lastSeenLocation,
-            @Part("lastSeenTime") RequestBody lastSeenTime,
-            @Part("contact") RequestBody contact,
-            @Part("additionalInfo") RequestBody additionalInfo,
-            @Part("kakaoId") RequestBody kakaoId,
-            @Part List<MultipartBody.Part> images
+            @Part("board") RequestBody board,
+            @Part List<MultipartBody.Part> image
     );
 }
-
