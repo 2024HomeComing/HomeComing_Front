@@ -38,4 +38,8 @@ public interface ApiService {
 
     @GET("boards")
     Call<List<Board>> getBoardList();
+
+    @GET("boards/{id}")
+    Call<Board> getBoardData(@Path("id") long boardId);
+
 }

@@ -8,13 +8,75 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <!-- TODO: Update blank fragment layout -->
+        <!-- TODO: Update blank fragment layout -->
         <TextView
+            android:id="@+id/homeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘 올라온 게시글"
+            android:textSize="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Home"
-            android:textSize="40dp"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/homeTextView"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp">
+
+                <TextView
+                    android:id="@+id/missingPostsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="오늘 등록된 실종게시물"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/missingPostsCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="15dp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="20dp">
+
+                <TextView
+                    android:id="@+id/findPostsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘 등록된 목격게시물"
+                    android:textSize="15dp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/findPostsCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="m개"
+                    android:textSize="15dp"
+                    android:gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
     </RelativeLayout>
-
 </FrameLayout>
