@@ -12,8 +12,9 @@ public class DisappearanceReport {
     private String lastSeenTime;
     private String contact;
     private String additionalInfo;
+    private String imageUrl; // 추가된 필드
 
-    public DisappearanceReport(String title, String breed, String name, String size, String age, String color, String characteristics, String lastSeenLocation, String lastSeenTime, String contact, String additionalInfo) {
+    public DisappearanceReport(String title, String breed, String name, String size, String age, String color, String characteristics, String lastSeenLocation, String lastSeenTime, String contact, String additionalInfo, String imageUrl) {
         this.title = title;
         this.breed = breed;
         this.name = name;
@@ -25,6 +26,7 @@ public class DisappearanceReport {
         this.lastSeenTime = lastSeenTime;
         this.contact = contact;
         this.additionalInfo = additionalInfo;
+        this.imageUrl = imageUrl; // 추가된 필드 초기화
     }
 
     // 각 필드의 getter 메서드를 추가할 수 있습니다.
@@ -70,5 +72,9 @@ public class DisappearanceReport {
 
     public String getAdditionalInfo() {
         return additionalInfo;
+    }
+
+    public String getImageUrl() {
+        return imageUrl; // 추가된 메서드
     }
 }

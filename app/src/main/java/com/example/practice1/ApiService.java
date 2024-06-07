@@ -1,5 +1,6 @@
 package com.example.practice1;
 
+import com.example.practice1.dto.Board;
 import com.example.practice1.dto.PetInfo;
 import com.example.practice1.dto.Report;
 
@@ -34,4 +35,7 @@ public interface ApiService {
             @Part("board") RequestBody board,
             @Part List<MultipartBody.Part> image
     );
+
+    @GET("boards")
+    Call<List<Board>> getBoardList();
 }

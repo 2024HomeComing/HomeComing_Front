@@ -189,7 +189,7 @@ public class WriteMissingFragment extends Fragment {
 
     private void sendPostToServer(RequestBody boardPart, List<MultipartBody.Part> imageParts) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://homeskyul.store/boards/")
+                .baseUrl("https://homeskyul.store/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiService apiService = retrofit.create(ApiService.class);
