@@ -1,5 +1,8 @@
 package com.example.practice1;
 
+import com.example.practice1.dto.PetInfo;
+import com.example.practice1.dto.Report;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -15,11 +18,18 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public interface ApiService {
-    @GET("users/{userId}/qrcodes")
-    Call<List<String>> getQrCodes(@Path("userId") String userId);
 
+    //반려동물 조회
+    @GET("pets/{userId}")
+    Call<List<PetInfo>> getPetsByUserId(@Path("userId") String userId);
+
+    //반려동물 신고접수 조회
+    @GET("pets/reports/{petInfoId}")
+    Call<List<Report>> getReportsByPetInfoId(@Path("petInfoId") Long petInfoId);
+
+   //게시글 작성
     @Multipart
-    @POST("/boards") // 실제 서버의 엔드포인트로 변경 필요
+    @POST("boards") // 실제 서버의 엔드포인트로 변경 필요
     Call<ResponseBody> createPost(
             @Part("board") RequestBody board,
             @Part List<MultipartBody.Part> image
