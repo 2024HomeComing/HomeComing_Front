@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int DELAY_TIME_MILLIS = 3000;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
