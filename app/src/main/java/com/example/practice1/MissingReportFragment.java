@@ -1,5 +1,6 @@
 package com.example.practice1;
 
+// MissingReportFragment.java
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.practice1.dto.Board;
-
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -123,7 +123,9 @@ public class MissingReportFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = new WrittenMissingFragment();
+                    // 클릭된 게시글의 boardId를 가져와서 WrittenMissingFragment로 전달
+                    long boardId = report.getId();
+                    Fragment fragment = WrittenMissingFragment.newInstance(String.valueOf(boardId));
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.addToBackStack(null);

@@ -61,6 +61,18 @@ public class MypageFragment extends Fragment {
                     .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
                     .commit();
         });
+        // "manage_report" 버튼 클릭 이벤트 처리
+        Button manageReportButton = view.findViewById(R.id.manage_report);
+        manageReportButton.setOnClickListener(v -> {
+            // ManageReportFragment로 전환
+            ManageReportFragment manageReportFragment = new ManageReportFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, manageReportFragment)
+                    .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
+                    .commit();
+        });
+
+
 
         // "로그아웃" 버튼 클릭 이벤트 처리
         Button logoutButton = view.findViewById(R.id.logout);
