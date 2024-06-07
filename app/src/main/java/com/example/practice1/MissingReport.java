@@ -1,6 +1,8 @@
 package com.example.practice1;
 
-public class DisappearanceReport {
+import java.util.List;
+
+public class MissingReport {
     private String title;
     private String breed;
     private String name;
@@ -12,9 +14,10 @@ public class DisappearanceReport {
     private String lastSeenTime;
     private String contact;
     private String additionalInfo;
-    private String imageUrl; // 추가된 필드
+    private List<String> images;
 
-    public DisappearanceReport(String title, String breed, String name, String size, String age, String color, String characteristics, String lastSeenLocation, String lastSeenTime, String contact, String additionalInfo, String imageUrl) {
+    // 생성자
+    public MissingReport(String title, String breed, String name, String size, String age, String color, String characteristics, String lastSeenLocation, String lastSeenTime, String contact, String additionalInfo, List<String> images) {
         this.title = title;
         this.breed = breed;
         this.name = name;
@@ -26,10 +29,10 @@ public class DisappearanceReport {
         this.lastSeenTime = lastSeenTime;
         this.contact = contact;
         this.additionalInfo = additionalInfo;
-        this.imageUrl = imageUrl; // 추가된 필드 초기화
+        this.images = images;
     }
 
-    // 각 필드의 getter 메서드를 추가할 수 있습니다.
+    // getter 메서드들
     public String getTitle() {
         return title;
     }
@@ -74,7 +77,7 @@ public class DisappearanceReport {
         return additionalInfo;
     }
 
-    public String getImageUrl() {
-        return imageUrl; // 추가된 메서드
+    public List<String> getImages() {
+        return images;
     }
 }
