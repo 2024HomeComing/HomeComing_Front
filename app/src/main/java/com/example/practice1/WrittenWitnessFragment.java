@@ -11,10 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
-
 import com.example.practice1.dto.SightingBoard;
-
-
 import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,30 +41,30 @@ public class WrittenWitnessFragment extends Fragment {
 
         // 아이디 가져오기
         Bundle arguments = getArguments();
-        if (arguments != null && arguments.containsKey("boardId")) {
-            String boardId = arguments.getString("boardId");
+        if (arguments != null && arguments.containsKey("sightingId")) {
+            long sightingId = arguments.getLong("sightingId");
             // 서버에서 데이터를 가져와 UI에 채워넣는 메서드 호출
-            fetchBoardData(boardId);
+            fetchBoardData(sightingId);
         } else {
-            Log.e("onCreateView", "No boardId found in arguments.");
+            Log.e("onCreateView", "No sightingId found in arguments.");
         }
 
         return view;
     }
 
     // newInstance 메서드를 사용하여 WrittenWitnessFragment를 생성하고 아이디를 전달
-    public static WrittenWitnessFragment newInstance(String boardId) {
+    public static WrittenWitnessFragment newInstance(long sightingId) {
         WrittenWitnessFragment fragment = new WrittenWitnessFragment();
         Bundle args = new Bundle();
-        args.putString("boardId", boardId);
+        args.putLong("sightingId", sightingId);
         fragment.setArguments(args);
         return fragment;
     }
 
-    private void fetchBoardData(String sightingId) {
+    private void fetchBoardData(long sightingId) {
         // Retrofit을 사용하여 서버에서 데이터를 가져오는 코드 작성
         ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
-        Call<SightingBoard> call = service.getSightingBoardById(Long.parseLong(sightingId)); // 예시: 실제로는 필요한 Endpoint와 호출 방식에 따라 달라질 수 있습니다.
+        Call<SightingBoard> call = service.getSightingBoardById(sightingId);
 
         // Retrofit 호출 전 로그 추가
         Log.d("fetchBoardData", "Fetching board data...");
@@ -79,21 +76,25 @@ public class WrittenWitnessFragment extends Fragment {
                 Log.d("fetchBoardData", "Response received");
 
                 if (response.isSuccessful()) {
-                    SightingBoard board = response.body();
-                    // 가져온 데이터를 UI에 채워넣기
-                    wtitle.setText(board.getTitle());
-                    wbreed.setText("품종 : " + board.getwBreed());
-                    wsize.setText("크기 : " + board.getwSize());
-                    wcolor.setText("털색 : " + board.getwColor());
-                    wcharacteristics.setText("특징 : " + board.getwCharacteristics());
-                    wlastSeenLocation.setText("마지막 확인 위치 : " + board.getwLastSeenLocation());
-                    wlastSeenTime.setText("확인 시기 : " + board.getwLastSeenTime());
-                    wcontact.setText("연락처: " + board.getwContact());
-                    wadditionalInfo.setText("추가적인 특징 : " + board.getwAdditionalInfo());
-                    // 이미지 로드
-                    Glide.with(requireContext())
-                            .load(board.getImageUrl())
-                            .into(wpetImageView);
+                    SightingBoard sightingBoard = response.body();
+                    if (sightingBoard != null) {
+                        // 가져온 데이터를 UI에 채워넣기
+                        wtitle.setText(sightingBoard.getwTitle());
+                        wbreed.setText("품종 : " + sightingBoard.getwBreed());
+                        wsize.setText("크기 : " + sightingBoard.getwSize());
+                        wcolor.setText("털색 : " + sightingBoard.getwColor());
+                        wcharacteristics.setText("특징 : " + sightingBoard.getwCharacteristics());
+                        wlastSeenLocation.setText("마지막 확인 위치 : " + sightingBoard.getwLastSeenLocation());
+                        wlastSeenTime.setText("확인 시기 : " + sightingBoard.getwLastSeenTime());
+                        wcontact.setText("연락처: " + sightingBoard.getwContact());
+                        wadditionalInfo.setText("추가적인 특징 : " + sightingBoard.getwAdditionalInfo());
+                        // 이미지 로드
+                        Glide.with(requireContext())
+                                .load(sightingBoard.getwImageUrl())
+                                .into(wpetImageView);
+                    } else {
+                        Log.e("fetchBoardData", "Response body is null");
+                    }
                 } else {
                     // 서버 응답이 실패한 경우 처리
                     Log.e("fetchBoardData", "Response not successful: " + response.message());
