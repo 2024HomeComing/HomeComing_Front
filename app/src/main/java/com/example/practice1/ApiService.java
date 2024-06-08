@@ -3,11 +3,14 @@ package com.example.practice1;
 import com.example.practice1.dto.Board;
 import com.example.practice1.dto.PetInfo;
 import com.example.practice1.dto.Report;
+import com.example.practice1.dto.SightingBoard;
 
 import java.util.List;
 
 import retrofit2.Call;
+
 import retrofit2.http.GET;
+
 import retrofit2.http.Path;
 
 import okhttp3.MultipartBody;
@@ -42,8 +45,24 @@ public interface ApiService {
     @GET("boards/{id}")
     Call<Board> getBoardData(@Path("id") long boardId);
 
-    //마이페이지 나의 게시글
-    @GET("boards/user/{userId}")
-    Call<List<Board>> getBoardByUserId(@Path("userId") String userId);
+    // Create a sighting report
+    //목격 게시글 작성
+    @Multipart
+    @POST("sighting") // 실제 서버의 엔드포인트로 변경 필요
+    Call<ResponseBody> createSightingPost(
+            @Part("board") RequestBody board,
+            @Part List<MultipartBody.Part> image
+    );
 
+    //목격 게시글 전체 조회
+    @GET("sighting")
+    Call<List<SightingBoard>> getAllSightingBoards();
+
+    //목격 게시글 한개만 조회
+    @GET("sighting/{sightingId}")
+    Call<SightingBoard> getSightingBoardById(@Path("Id") Long sightingId);
+
+    //오늘 올라온 목격 게시글 전체 개수 확인
+    @GET("sighting/count/today")
+    Call<Long> countSightingPostsToday();
 }

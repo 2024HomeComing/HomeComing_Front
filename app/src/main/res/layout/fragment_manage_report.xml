@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parent_layout"
     tools:context=".ManageReportFragment">
 
     <TextView
@@ -12,6 +13,12 @@
         android:textSize="30dp">
     </TextView>
 
-
-
+    <!-- RecyclerView 추가 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_my_reports"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:padding="8dp"
+        android:clipToPadding="false" />
 </FrameLayout>
