@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WriteWitnessFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="80dp">
+
+            <ImageButton
+                android:id="@+id/postimg"
+                android:src="@drawable/postimg"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="#F0F0F0">
+            </ImageButton>
+
+            <LinearLayout
+                android:id="@+id/image_container_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/postimg"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제목"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="품종"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwBreed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="크기"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="털색"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="특징"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwCharacteristics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마지막 확인 위치"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwLastSeenLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인 시기"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwLastSeenTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="연락처"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기타 정보"
+                android:paddingLeft="25dp"
+                android:paddingTop="30dp">
+            </TextView>
+
+            <EditText
+                android:id="@+id/etwAdditionalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_bg"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="20dp"/>
+
+            <Button
+                android:id="@+id/btnwSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성 완료"
+                android:textSize="25dp">
+            </Button>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
