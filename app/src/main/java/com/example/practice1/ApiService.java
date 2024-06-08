@@ -42,4 +42,8 @@ public interface ApiService {
     @GET("boards/{id}")
     Call<Board> getBoardData(@Path("id") long boardId);
 
+    //마이페이지 나의 게시글
+    @GET("boards/user/{userId}")
+    Call<List<Board>> getBoardByUserId(@Path("userId") String userId);
+
 }
