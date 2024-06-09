@@ -1,7 +1,7 @@
 package com.example.practice1.dto;
 
 public class SightingBoard {
-    private Long wid;
+    private Long id;
     private String wtitle;
     private String wbreed;
 
@@ -17,12 +17,12 @@ public class SightingBoard {
 
 
 
-    public Long getwId() {
-        return wid;
+    public Long getId() {
+        return id;
     }
 
-    public void setwId(Long wid) {
-        this.wid = wid;
+    public void setwId(Long id) {
+        this.id = id;
     }
 
     public String getwTitle() {
@@ -118,7 +118,4 @@ public class SightingBoard {
         return 0;
     }
 
-    public String getId() {
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.practice1;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log; // 추가
 import android.view.LayoutInflater;
@@ -127,7 +128,8 @@ public class WitnessReportFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // 클릭된 게시글의 sightingId를 가져와서 WrittenMissingFragment로 전달
-                    long sightingId = Long.parseLong(report.getId());
+                    long sightingId = (report.getId());
+                    Log.d("SightingIdCheck", "Sighting ID: " + sightingId);
                     Fragment fragment = WrittenWitnessFragment.newInstance(String.valueOf(sightingId));
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, fragment);

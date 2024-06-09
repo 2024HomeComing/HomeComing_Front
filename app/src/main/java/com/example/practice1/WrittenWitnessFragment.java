@@ -44,10 +44,10 @@ public class WrittenWitnessFragment extends Fragment {
 
         // 아이디 가져오기
         Bundle arguments = getArguments();
-        if (arguments != null && arguments.containsKey("boardId")) {
-            String boardId = arguments.getString("boardId");
+        if (arguments != null && arguments.containsKey("sightingId")) {
+            String sightingId = arguments.getString("sightingId");
             // 서버에서 데이터를 가져와 UI에 채워넣는 메서드 호출
-            fetchBoardData(boardId);
+            fetchBoardData(sightingId);
         } else {
             Log.e("onCreateView", "No boardId found in arguments.");
         }
@@ -56,10 +56,10 @@ public class WrittenWitnessFragment extends Fragment {
     }
 
     // newInstance 메서드를 사용하여 WrittenWitnessFragment를 생성하고 아이디를 전달
-    public static WrittenWitnessFragment newInstance(String boardId) {
+    public static WrittenWitnessFragment newInstance(String sightingId) {
         WrittenWitnessFragment fragment = new WrittenWitnessFragment();
         Bundle args = new Bundle();
-        args.putString("boardId", boardId);
+        args.putString("sightingId", sightingId);
         fragment.setArguments(args);
         return fragment;
     }

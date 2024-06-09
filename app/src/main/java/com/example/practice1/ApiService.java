@@ -60,7 +60,7 @@ public interface ApiService {
 
     //목격 게시글 한개만 조회
     @GET("sighting/{sightingId}")
-    Call<SightingBoard> getSightingBoardById(@Path("Id") Long sightingId);
+    Call<SightingBoard> getSightingBoardById(@Path("sightingId") long sightingId);
 
     //오늘 올라온 목격 게시글 전체 개수 확인
     @GET("sighting/count/today")
