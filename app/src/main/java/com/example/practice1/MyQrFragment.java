@@ -2,6 +2,7 @@ package com.example.practice1;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,6 +42,9 @@ public class MyQrFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(MyQrViewModel.class);
 
+        generatedQr1.setOnClickListener(v -> showLargeQr(generatedQr1));
+        generatedQr2.setOnClickListener(v -> showLargeQr(generatedQr2));
+        generatedQr3.setOnClickListener(v -> showLargeQr(generatedQr3));
         // 카카오톡 프로필 정보 가져오기 및 UI 업데이트
         UserApiClient.getInstance().me((user, error) -> {
             if (error != null) {
@@ -109,4 +114,12 @@ public class MyQrFragment extends Fragment {
             textView.setText("");
         }
     }
+
+    private void showLargeQr(ImageView qrImageView) {
+        // QR 이미지를 크게 보여줄 새로운 Fragment를 띄웁니다.
+        FragmentManager fragmentManager = getParentFragmentManager();
+        LargeQrDialogFragment dialogFragment = LargeQrDialogFragment.newInstance(((BitmapDrawable) qrImageView.getDrawable()).getBitmap());
+        dialogFragment.show(fragmentManager, "large_qr");
+    }
+
 }
