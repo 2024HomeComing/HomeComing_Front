@@ -17,12 +17,12 @@ public class SightingBoard {
 
 
 
-    public Long getId() {
+    public Long getwId() {
         return id;
     }
 
-    public void setwId(Long id) {
-        this.id = id;
+    public void setwId(Long wid) {
+        this.id = wid;
     }
 
     public String getwTitle() {
@@ -118,4 +118,7 @@ public class SightingBoard {
         return 0;
     }
 
+    public String getId() {
+        return null;
+    }
 }

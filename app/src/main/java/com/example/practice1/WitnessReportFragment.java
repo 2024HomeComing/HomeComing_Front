@@ -1,6 +1,5 @@
 package com.example.practice1;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log; // 추가
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import retrofit2.Response;
 
 public class WitnessReportFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private RecyclerView wrecyclerView;
     private WitnessReportAdapter adapter;
 
     @Nullable
@@ -33,10 +32,10 @@ public class WitnessReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_witness_report, container, false);
 
-        recyclerView = view.findViewById(R.id.wrecyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        wrecyclerView = view.findViewById(R.id.wrecyclerView);
+        wrecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         adapter = new WitnessReportAdapter();
-        recyclerView.setAdapter(adapter);
+        wrecyclerView.setAdapter(adapter);
 
         Button writeButton = view.findViewById(R.id.btn_witwrite);
         writeButton.setOnClickListener(new View.OnClickListener() {
@@ -108,11 +107,11 @@ public class WitnessReportFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             SightingBoard report = data.get(position);
-            holder.wtextViewDescription.setText(String.valueOf(report.getTitle()));
+            holder.wtextViewDescription.setText(String.valueOf(report.getwTitle()));
 
             // 이미지 로드
             Glide.with(holder.itemView.getContext())
-                    .load(report.getImageUrl())
+                    .load(report.getwImageUrl())
                     .into(holder.wimageView);
 
             // 이미지 크기 설정
@@ -128,9 +127,8 @@ public class WitnessReportFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // 클릭된 게시글의 sightingId를 가져와서 WrittenMissingFragment로 전달
-                    long sightingId = (report.getId());
-                    Log.d("SightingIdCheck", "Sighting ID: " + sightingId);
-                    Fragment fragment = WrittenWitnessFragment.newInstance(String.valueOf(sightingId));
+                    long sightingId = report.getwId();
+                    Fragment fragment = WrittenWitnessFragment.newInstance(sightingId);
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.addToBackStack(null);
