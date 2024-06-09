@@ -114,11 +114,12 @@ public class SightingBoard {
         return new byte[0];
     }
 
-    public int getTitle() {
-        return 0;
-    }
 
     public String getId() {
+        return null;
+    }
+
+    public Object getuserId() {
         return null;
     }
 }
