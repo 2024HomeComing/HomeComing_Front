@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import com.example.practice1.dto.Board;
 
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +32,10 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         missingPostsCountTextView = view.findViewById(R.id.missingPostsCountTextView);
         fetchDataFromServer();
+
+        TextView todayDateTextView = view.findViewById(R.id.todayDateTextView);
+        String currentDate = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(new Date());
+        todayDateTextView.setText(currentDate);
         return view;
     }
 

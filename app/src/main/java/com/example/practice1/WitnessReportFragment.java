@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.practice1.dto.SightingBoard;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,19 +64,22 @@ public class WitnessReportFragment extends Fragment {
             public void onResponse(Call<List<SightingBoard>> call, Response<List<SightingBoard>> response) {
                 if (response.isSuccessful()) {
                     List<SightingBoard> reports = response.body();
+                    // 역순으로 정렬하여 최신 글이 가장 위에 오도록 함
+                    Collections.reverse(reports);
                     adapter.setData(reports); // RecyclerView에 데이터 설정
-                    Log.d("WitnessReportFragment", "서버에서 데이터 가져오기 성공: " + reports.size() + "개의 아이템을 가져왔습니다."); // 추가
+                    Log.d("WitnessReportFragment", "서버에서 데이터 가져오기 성공: " + reports.size() + "개의 아이템을 가져왔습니다.");
                 } else {
-                    Log.e("WitnessReportFragment", "서버 응답 오류: " + response.message()); // 추가
+                    Log.e("WitnessReportFragment", "서버 응답 오류: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<SightingBoard>> call, Throwable t) {
-                Log.e("WitnessReportFragment", "데이터 가져오기 실패: " + t.getMessage()); // 추가
+                Log.e("WitnessReportFragment", "데이터 가져오기 실패: " + t.getMessage());
             }
         });
     }
+
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView wimageView;

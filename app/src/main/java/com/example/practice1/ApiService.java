@@ -45,6 +45,9 @@ public interface ApiService {
     @GET("boards/{id}")
     Call<Board> getBoardData(@Path("id") long boardId);
 
+    @GET("boards/user/{userId}")
+    Call<List<Board>> getUserBoards(@Path("userId") String userId);
+
     // Create a sighting report
     //목격 게시글 작성
     @Multipart
@@ -65,4 +68,7 @@ public interface ApiService {
     //오늘 올라온 목격 게시글 전체 개수 확인
     @GET("sighting/count/today")
     Call<Long> countSightingPostsToday();
+
+    // ApiService.java
+
 }

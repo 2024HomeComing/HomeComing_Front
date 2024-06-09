@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.practice1.dto.Board;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +63,8 @@ public class MissingReportFragment extends Fragment {
             public void onResponse(Call<List<Board>> call, Response<List<Board>> response) {
                 if (response.isSuccessful()) {
                     List<Board> reports = response.body();
+                    // 역순으로 정렬하여 최신 글이 가장 위에 오도록 함
+                    Collections.reverse(reports);
                     adapter.setData(reports); // RecyclerView에 데이터 설정
                 }
             }
