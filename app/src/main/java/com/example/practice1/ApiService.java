@@ -1,6 +1,7 @@
 package com.example.practice1;
 
 import com.example.practice1.dto.Board;
+import com.example.practice1.dto.MatchResult;
 import com.example.practice1.dto.PetInfo;
 import com.example.practice1.dto.Report;
 import com.example.practice1.dto.SightingBoard;
@@ -42,6 +43,9 @@ public interface ApiService {
             @Part("board") RequestBody board,
             @Part List<MultipartBody.Part> image
     );
+    @GET("match/{boardId}")
+    Call<MatchResult>findBestMatch(@Path("boardId")Long boardId);
+
     @GET("boards")
     Call<List<Board>> getBoardList();
 
