@@ -31,6 +31,10 @@ public interface ApiService {
     @GET("pets/reports/{petInfoId}")
     Call<List<Report>> getReportsByPetInfoId(@Path("petInfoId") Long petInfoId);
 
+    //신고접수현황에서 접수된 신고 상세보기
+    @GET("pets/report/{reportId}")
+    Call<Report> getReportById(@Path("reportId") Long reportId);
+
    //게시글 작성
     @Multipart
     @POST("boards") // 실제 서버의 엔드포인트로 변경 필요

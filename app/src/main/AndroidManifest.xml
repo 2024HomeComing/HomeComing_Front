@@ -52,7 +52,7 @@
                     android:scheme="kakao8c134f9a5a1cc84a31819ccda029b553" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReportActivity"/>
+        <activity android:name=".ReportFragment"/>
         <activity android:name=".LoginScreen" />
 
         <activity android:name=".HomeActivity" />

@@ -30,21 +30,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginVertical="8dp">
+                android:layout_marginVertical="8dp"
+                android:background="@drawable/rounded_background"
+                android:padding="12dp">
 
                 <TextView
                     android:id="@+id/petName1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:paddingStart="16dp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/generatedQr1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="16dp" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -52,21 +52,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginVertical="8dp">
+                android:layout_marginVertical="8dp"
+                android:background="@drawable/rounded_background"
+                android:padding="12dp">
 
                 <TextView
                     android:id="@+id/petName2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:paddingStart="16dp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/generatedQr2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="16dp" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -74,21 +74,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginVertical="8dp">
+                android:layout_marginVertical="8dp"
+                android:background="@drawable/rounded_background"
+                android:padding="12dp">
 
                 <TextView
                     android:id="@+id/petName3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:paddingStart="16dp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/generatedQr3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="16dp" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
 

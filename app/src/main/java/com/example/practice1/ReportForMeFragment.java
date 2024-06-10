@@ -20,9 +20,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
-public class ReportForMe extends Fragment {
+public class ReportForMeFragment extends Fragment {
     private ApiService apiService;
     private RecyclerView recyclerViewPets;
     private PetAdapter petAdapter;
@@ -43,8 +42,6 @@ public class ReportForMe extends Fragment {
 
         return view;
     }
-
-
     private void getPetsByUserId(String userId) {
         Call<List<PetInfo>> call = apiService.getPetsByUserId(userId);
         call.enqueue(new Callback<List<PetInfo>>() {
@@ -52,7 +49,7 @@ public class ReportForMe extends Fragment {
             public void onResponse(Call<List<PetInfo>> call, Response<List<PetInfo>> response) {
                 if (response.isSuccessful()) {
                     List<PetInfo> pets = response.body();
-                    petAdapter = new PetAdapter(getContext(), pets);
+                    petAdapter = new PetAdapter(getContext(), pets, petInfo -> openReportFragment(petInfo.getId()));
                     recyclerViewPets.setAdapter(petAdapter);
                 }
             }
@@ -64,4 +61,15 @@ public class ReportForMe extends Fragment {
         });
     }
 
+    private void openReportFragment(Long petId) {
+        ReportFragment reportFragment = new ReportFragment();
+        Bundle args = new Bundle();
+        args.putLong("petInfoId", petId);
+        reportFragment.setArguments(args);
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, reportFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 }
