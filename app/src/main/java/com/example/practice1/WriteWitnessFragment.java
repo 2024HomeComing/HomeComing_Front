@@ -217,7 +217,7 @@ public class WriteWitnessFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         if (fragmentManager != null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new WitnessReportFragment());
+            fragmentTransaction.replace(R.id.fragment_container, new DashboardFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }

@@ -47,4 +47,5 @@ public class DashboardFragment extends Fragment {
         adapter.addFragment(new WitnessReportFragment(), "목격 제보");
         viewPager.setAdapter(adapter);
     }
+
 }

@@ -107,7 +107,12 @@ public class ManageReportFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Board board = reportList.get(position);
-            holder.textView.setText(board.getTitle());
+            String title = board.getTitle();
+            // 제목이 5자 이상이면 최대 5자까지만 남기고 나머지는 자름
+            if (title.length() > 5) {
+                title = title.substring(0, 5);
+            }
+            holder.textView.setText(title);
         }
 
         @Override

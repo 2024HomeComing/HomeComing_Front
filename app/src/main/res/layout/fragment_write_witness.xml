@@ -63,6 +63,7 @@
                 android:background="@drawable/round_edittext_bg"
                 android:textSize="20dp"
                 android:padding="10dp"
+                android:hint="예 : 강아지, 고양이, 새"
                 android:layout_marginHorizontal="20dp"/>
 
 
@@ -81,6 +82,7 @@
                 android:background="@drawable/round_edittext_bg"
                 android:textSize="20dp"
                 android:padding="10dp"
+                android:hint="예 : 대, 중, 소"
                 android:layout_marginHorizontal="20dp"/>
 
             <TextView
@@ -98,6 +100,7 @@
                 android:background="@drawable/round_edittext_bg"
                 android:textSize="20dp"
                 android:padding="10dp"
+                android:hint="예 : 검정, 흰색, 누런색, 갈색"
                 android:layout_marginHorizontal="20dp"/>
 
             <TextView
@@ -149,6 +152,7 @@
                 android:background="@drawable/round_edittext_bg"
                 android:textSize="20dp"
                 android:padding="10dp"
+                android:hint="yyyy-mm-dd"
                 android:layout_marginHorizontal="20dp"/>
 
             <TextView
