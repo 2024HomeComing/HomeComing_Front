@@ -43,7 +43,7 @@ public class ShelterFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "ShelterFragment";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final int SEARCH_RADIUS = 1000000; // 검색 반경 (미터)
+    private static final int SEARCH_RADIUS = 300000; // 검색 반경 (미터)
     private GoogleMap mMap;
 
     // 현재 위치 좌표
