@@ -20,9 +20,16 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     private Context context;
     private List<PetInfo> petList;
 
-    public PetAdapter(Context context, List<PetInfo> petList) {
+    private OnReportButtonClickListener onReportButtonClickListener;
+
+    public PetAdapter(Context context, List<PetInfo> petList, OnReportButtonClickListener listener) {
         this.context = context;
         this.petList = petList;
+        this.onReportButtonClickListener = listener;
+    }
+
+    public interface OnReportButtonClickListener {
+        void onReportButtonClick(PetInfo petInfo);
     }
 
     @NonNull
@@ -34,16 +41,9 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PetViewHolder holder, int position) {
-        PetInfo pet = petList.get(position);
-        holder.textViewPetName.setText(pet.getName());
-
-        holder.buttonReport.setOnClickListener(v -> {
-
-            Log.d("PetAdapter", "Pet ID: " + pet.getId());
-            Intent intent = new Intent(context, ReportActivity.class);
-            intent.putExtra("petInfoId", pet.getId());
-            context.startActivity(intent);
-        });
+        PetInfo petInfo = petList.get(position);
+        holder.textViewPetName.setText(petInfo.getName());
+        holder.buttonReport.setOnClickListener(v -> onReportButtonClickListener.onReportButtonClick(petInfo));
     }
 
     @Override

@@ -98,7 +98,7 @@ public class MypageFragment extends Fragment {
         Button reportForMeButton = view.findViewById(R.id.report_for_me);
         reportForMeButton.setOnClickListener(v -> {
             // ReportforMeFragment로 전환
-            ReportForMe reportForMeFragment = new ReportForMe();
+            ReportForMeFragment reportForMeFragment = new ReportForMeFragment();
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, reportForMeFragment)
                     .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
