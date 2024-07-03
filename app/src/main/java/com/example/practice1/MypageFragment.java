@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,11 @@ public class MypageFragment extends Fragment {
         // 프로필 이름 텍스트뷰를 찾음
         TextView profileNameTextView = view.findViewById(R.id.profilename);
 
+        ImageView profileImageView = view.findViewById(R.id.profileImg);
+
+        // Set the drawable resource to the ImageView
+        profileImageView.setImageResource(R.drawable.basic_profile);
+
         // 카카오톡 프로필 정보 가져오기 및 UI 업데이트
         // 사용자 정보 가져오기
         UserApiClient.getInstance().me((user, error) -> {
@@ -35,7 +41,7 @@ public class MypageFragment extends Fragment {
                 // 사용자 정보에서 이름 가져오기
                 String userName = user.getKakaoAccount().getName();
                 // 이름을 텍스트뷰에 설정
-                profileNameTextView.setText(userName);
+                profileNameTextView.setText(userName + "님");
             }
             return null;
         });
@@ -71,7 +77,6 @@ public class MypageFragment extends Fragment {
                     .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
                     .commit();
         });
-
 
 
         // "로그아웃" 버튼 클릭 이벤트 처리
