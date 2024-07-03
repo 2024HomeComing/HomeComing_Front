@@ -25,21 +25,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#F2F2F2"
+                    android:paddingTop="20dp"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+
                         >
 
-                        <ImageView
+                        <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileImg"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/profileimg">
-                        </ImageView>
+                            android:background="@color/material_dynamic_neutral_variant60"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Circle"
+                            android:scaleType="centerCrop" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -162,6 +165,7 @@
                 </TextView>
 
                 <Button
+                    android:id="@+id/btn_qna"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="QnA"

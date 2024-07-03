@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 스타일 정의: BottomNavigationView -->
     <style name="Widget.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:background">@color/white</item> <!-- 바탕색 -->
         <item name="itemRippleColor">@null</item> <!-- Ripple 효과 비활성화 -->
     </style>
 
+
+    <!-- 원형 모양을 위한 스타일 -->
+    <style name="ShapeAppearanceOverlay.Circle" parent="">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Circle</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
+
