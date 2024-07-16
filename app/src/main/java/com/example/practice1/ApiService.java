@@ -3,8 +3,10 @@ package com.example.practice1;
 import com.example.practice1.dto.Board;
 import com.example.practice1.dto.MatchResult;
 import com.example.practice1.dto.PetInfo;
+import com.example.practice1.dto.ProfileUpdateDto;
 import com.example.practice1.dto.Report;
 import com.example.practice1.dto.SightingBoard;
+import com.kakao.sdk.user.model.User;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import retrofit2.Call;
 
 import retrofit2.http.GET;
 
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 import okhttp3.MultipartBody;
@@ -73,4 +76,11 @@ public interface ApiService {
     //오늘 올라온 목격 게시글 전체 개수 확인
     @GET("sighting/count/today")
     Call<Long> countSightingPostsToday();
+
+    @Multipart
+    @PUT("/api/users/profile_update")
+    Call<User> updateProfile(
+            @Part("P_update") RequestBody profileUpdateDto,
+            @Part MultipartBody.Part image
+    );
 }
