@@ -150,6 +150,7 @@ public class WriteMissingFragment extends Fragment {
 
     private void submitPost() {
         try {
+            // JSON 객체 생성
             JSONObject boardJson = new JSONObject();
             boardJson.put("title", title.getText().toString());
             boardJson.put("breed", breed.getText().toString());
@@ -165,21 +166,34 @@ public class WriteMissingFragment extends Fragment {
             String userId = SingletonClass.getInstance().getUserId();
             boardJson.put("userId", userId);
 
+            // JSON 객체 로그 출력
+            Log.d("WriteMissingFragment", "submitPost: JSON 데이터: " + boardJson.toString());
+
+            // JSON 데이터에 대한 RequestBody 생성
             RequestBody boardPart = RequestBody.create(MediaType.parse("application/json"), boardJson.toString());
 
+            // 이미지 파트 생성 및 로그 출력
             List<MultipartBody.Part> imageParts = new ArrayList<>();
             for (Uri uri : selectedImageUris) {
                 String filePath = getRealPathFromURI(uri);
                 if (filePath != null) {
                     File file = new File(filePath);
+                    // 파일 경로와 이름 로그 출력
+                    Log.d("WriteMissingFragment", "submitPost: 이미지 파일 경로: " + filePath);
+                    Log.d("WriteMissingFragment", "submitPost: 이미지 파일 이름: " + file.getName());
+
                     RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
                     MultipartBody.Part part = MultipartBody.Part.createFormData("images", file.getName(), requestBody);
                     imageParts.add(part);
                 } else {
-                    Log.e("WriteMissingFragment", "Image file path is null");
+                    Log.e("WriteMissingFragment", "submitPost: 이미지 파일 경로가 null입니다. URI: " + uri.toString());
                 }
             }
 
+            // 전송할 이미지 개수 로그 출력
+            Log.d("WriteMissingFragment", "submitPost: 이미지 개수: " + imageParts.size());
+
+            // 서버로 데이터 전송
             sendPostToServer(boardPart, imageParts);
         } catch (Exception e) {
             Log.e("WriteMissingFragment", "submitPost: 오류 발생", e);
