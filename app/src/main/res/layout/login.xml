@@ -16,7 +16,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/nlogo"
+                    android:src="@drawable/group6"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     android:layout_marginTop="100dp"

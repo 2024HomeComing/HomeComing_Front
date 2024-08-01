@@ -6,6 +6,7 @@ import com.example.practice1.dto.PetInfo;
 import com.example.practice1.dto.ProfileUpdateDto;
 import com.example.practice1.dto.Report;
 import com.example.practice1.dto.SightingBoard;
+import com.example.practice1.dto.UserProfile;
 import com.kakao.sdk.user.model.User;
 
 import java.util.List;
@@ -78,9 +79,12 @@ public interface ApiService {
     Call<Long> countSightingPostsToday();
 
     @Multipart
-    @PUT("/api/users/profile_update")
-    Call<User> updateProfile(
-            @Part("P_update") RequestBody profileUpdateDto,
-            @Part MultipartBody.Part image
+    @PUT("users/profile_update")
+    Call<ResponseBody> updateProfile(
+            @Part MultipartBody.Part image,
+            @Part("P_update") RequestBody profileUpdate
     );
+
+    @GET("users/{userId}")
+    Call<UserProfile> getUserProfile(@Path("userId") String userId);
 }

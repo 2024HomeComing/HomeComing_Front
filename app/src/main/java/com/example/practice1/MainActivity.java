@@ -1,6 +1,7 @@
 package com.example.practice1;
 
 import android.content.Intent;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +22,6 @@ import kotlin.jvm.functions.Function2;
 public class MainActivity extends AppCompatActivity {
 
     private static final int DELAY_TIME_MILLIS = 3000;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

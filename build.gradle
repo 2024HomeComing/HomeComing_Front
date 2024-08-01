@@ -1,5 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Project-level build.gradle
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.2.2' // 최신 버전으로 수정
+        classpath 'com.google.gms:google-services:4.3.15' // 최신 버전으로 수정
+        // 필요한 다른 classpath 의존성 추가
+    }
+}
+
 plugins {
     id 'com.android.application' version '8.2.1' apply false
-
 }

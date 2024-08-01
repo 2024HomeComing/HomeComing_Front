@@ -2,6 +2,7 @@ package com.example.practice1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,30 +18,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.practice1.dto.ProfileUpdateDto;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.gson.Gson;
 import com.kakao.sdk.user.UserApiClient;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.BufferedSink;
-import okio.Okio;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileEditFragment extends Fragment {
 
     private static final String TAG = "ProfileEditFragment";
     private static final int GALLERY_REQUEST_CODE = 1;
-    private static final String PROFILE_UPDATE_URL = "https://homeskyul.store/api/users/profile_update";
+    private static final String PROFILE_UPDATE_URL = "https://homeskyul.store/api/";
 
     private Context context;
     private List<Uri> selectedImageUris = new ArrayList<>();
@@ -50,7 +52,7 @@ public class ProfileEditFragment extends Fragment {
     private Button btnSave;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
     }
@@ -92,19 +94,32 @@ public class ProfileEditFragment extends Fragment {
         }
     }
 
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(columnIndex);
+            cursor.close();
+            return path;
+        }
+        return null;
+    }
+
     private void getUserIdAndSaveProfile() {
         UserApiClient.getInstance().me((user, error) -> {
             if (error != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", error);
                 Toast.makeText(context, "사용자 정보를 가져오는 데 실패했습니다", Toast.LENGTH_SHORT).show();
             } else if (user != null) {
-                saveProfile(user.getId());
+                saveProfile(String.valueOf(user.getId()));
             }
             return null;
         });
     }
 
-    private void saveProfile(Long userId) {
+    private void saveProfile(String userId) {
         String nickname = edNickname.getText().toString().trim();
         String region = edRegion.getText().toString().trim();
         String details = edDetails.getText().toString().trim();
@@ -114,73 +129,89 @@ public class ProfileEditFragment extends Fragment {
             return;
         }
 
-        Log.d(TAG, "User ID: " + userId);
+        Log.d(TAG, "User ID 전송 확인: " + userId);
 
-        OkHttpClient client = new OkHttpClient();
+        // ProfileUpdateDto 객체 생성
+        ProfileUpdateDto profileUpdateDto = new ProfileUpdateDto(userId, nickname, region, details, null);
 
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("P_update[user_id]", String.valueOf(userId))
-                .addFormDataPart("P_update[nickname]", nickname)
-                .addFormDataPart("P_update[region]", region)
-                .addFormDataPart("P_update[details]", details);
-
-        // 이미지 파일 추가
+        // 선택된 이미지가 있는 경우에만 전송
         if (!selectedImageUris.isEmpty()) {
             Uri imageUri = selectedImageUris.get(0);
-            try {
-                InputStream inputStream = context.getContentResolver().openInputStream(imageUri);
-                if (inputStream != null) {
-                    builder.addFormDataPart("P_update[image]", "image.jpg", new RequestBody() {
-                        @Override
-                        public MediaType contentType() {
-                            return MediaType.parse("image/jpeg"); // or image/png
-                        }
+            sendProfileToServer(profileUpdateDto, imageUri);
+        } else {
+            sendProfileToServer(profileUpdateDto, null);
+        }
+    }
 
-                        @Override
-                        public void writeTo(BufferedSink sink) throws IOException {
-                            try (InputStream in = inputStream) {
-                                sink.writeAll(Okio.source(in));
-                            }
-                        }
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(context, "이미지 파일을 열 수 없습니다", Toast.LENGTH_SHORT).show();
-                return;
+    private void sendProfileToServer(ProfileUpdateDto profileUpdateDto, Uri imageUri) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PROFILE_UPDATE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        MultipartBody.Part imagePart = null;
+        if (imageUri != null) {
+            String imagePath = getRealPathFromURI(imageUri);
+            Log.d(TAG, "Selected image path: " + imagePath); // 이미지 경로를 로그로 출력
+            if (imagePath != null) {
+                File file = new File(imagePath);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+                imagePart = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
+                Log.d(TAG, "Image attached: " + file.getName());
+            } else {
+                Log.e(TAG, "이미지 파일 경로가 null입니다");
             }
         }
 
-        RequestBody requestBody = builder.build();
-        Request request = new Request.Builder()
-                .url(PROFILE_UPDATE_URL)
-                .put(requestBody) // PUT 요청으로 변경
-                .build();
+        // Convert ProfileUpdateDto to JSON
+        Gson gson = new Gson();
+        String profileUpdateJson = gson.toJson(profileUpdateDto);
+        RequestBody profileUpdateBody = RequestBody.create(MediaType.parse("application/json"), profileUpdateJson);
 
-        client.newCall(request).enqueue(new Callback() {
+        // Log the data to be sent
+        Log.d(TAG, "ProfileUpdateDto JSON: " + profileUpdateJson);
+        if (imagePart != null) {
+            Log.d(TAG, "Image file name: " + imagePart.headers().get("Content-Disposition"));
+        } else {
+            Log.d(TAG, "No image attached");
+        }
+
+        Call<ResponseBody> call = apiService.updateProfile(imagePart, profileUpdateBody);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(TAG, "Profile update failed", e);
-                getActivity().runOnUiThread(() ->
-                        Toast.makeText(context, "프로필 업데이트 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseBody = response.body().string();
+                        Log.d(TAG, "Profile update successful: " + responseBody);
+                        getActivity().runOnUiThread(() -> {
+                            Toast.makeText(context, "프로필 업데이트 성공", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().popBackStack();
+                        });
+                    } catch (IOException e) {
+                        Log.e(TAG, "Response body parsing error", e);
+                    }
+                } else {
+                    try {
+                        String errorBody = response.errorBody().string();
+                        Log.e(TAG, "Profile update error: " + errorBody);
+                        getActivity().runOnUiThread(() ->
+                                Toast.makeText(context, "프로필 업데이트 오류: " + errorBody, Toast.LENGTH_SHORT).show()
+                        );
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error response parsing error", e);
+                    }
+                }
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                final String responseBody = response.body().string();
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "Profile update successful: " + responseBody);
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(context, "프로필 업데이트 성공", Toast.LENGTH_SHORT).show()
-                    );
-                } else {
-                    Log.e(TAG, "Profile update error: " + responseBody);
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(context, "프로필 업데이트 오류: " + responseBody, Toast.LENGTH_SHORT).show()
-                    );
-                }
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e(TAG, "Profile update failed", t);
+                getActivity().runOnUiThread(() ->
+                        Toast.makeText(context, "프로필 업데이트 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }

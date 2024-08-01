@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "220041701566",
+    "project_id": "homecoming-be03d",
+    "storage_bucket": "homecoming-be03d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220041701566:android:b0af736bd33d480af2d6ef",
+        "android_client_info": {
+          "package_name": "com.example.practice1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkPp_fJfMFokGeJm9pV9z9kKFuCJ5BLB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
