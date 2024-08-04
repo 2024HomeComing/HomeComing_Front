@@ -10,12 +10,20 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMsgService";
     private static final String CHANNEL_ID = "default_channel"; // 채널 ID
+    private FirebaseFirestore db;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        db = FirebaseFirestore.getInstance();
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -28,10 +36,26 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             Log.d(TAG, "Message Notification Title: " + title);
             Log.d(TAG, "Message Notification Body: " + msg);
 
+            // 알림을 Firestore에 저장
+            saveNotificationToFirestore(title, msg);
+
+            // 사용자에게 알림 표시
             sendNotification(title, msg);
         } else {
             Log.d(TAG, "Message Notification is null");
         }
+    }
+
+    private void saveNotificationToFirestore(String title, String msg) {
+        NotificationModel notification = new NotificationModel(title, msg, System.currentTimeMillis());
+        db.collection("notifications")
+                .add(notification)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "Notification added with ID: " + documentReference.getId());
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error adding notification", e);
+                });
     }
 
     private void sendNotification(String title, String msg) {
