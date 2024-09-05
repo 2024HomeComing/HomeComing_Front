@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.sdk.user.UserApiClient;
 
 import java.io.IOException;
@@ -17,12 +18,16 @@ import okhttp3.*;
 public class LoginScreen extends AppCompatActivity {
 
     private static final String TAG = "LoginScreen";
-    private String accessToken; // 토큰을 저장할 변수
+    private String accessToken; // 카카오 액세스 토큰을 저장할 변수
+    private String fcmToken; // Firebase 토큰을 저장할 변수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        // Firebase 토큰 요청
+        getFirebaseToken();
 
         // 카카오 로그인 버튼 클릭 이벤트 설정
         findViewById(R.id.kakao_login_button).setOnClickListener(view -> {
@@ -51,21 +56,24 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
     }
+
+    private void getFirebaseToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        fcmToken = task.getResult();
+                        Log.d(TAG, "Firebase Token: " + fcmToken);
+                    } else {
+                        Log.e(TAG, "Failed to get Firebase token", task.getException());
+                    }
+                });
+    }
+
     private void showWebLoginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("카카오톡이 설치되어 있지 않습니다. 웹 로그인을 하시겠습니까?")
-                .setPositiveButton("예", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startWebLogin();
-                    }
-                })
-                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton("예", (dialog, which) -> startWebLogin())
+                .setNegativeButton("아니오", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -75,9 +83,6 @@ public class LoginScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
-    // 사용자 정보 요청
     private void requestUserInfo() {
         UserApiClient.getInstance().me((user, error) -> {
             if (error != null) {
@@ -95,8 +100,8 @@ public class LoginScreen extends AppCompatActivity {
                 UserManager.saveUserId(getApplicationContext(), String.valueOf(user.getId()));
                 Log.i(TAG,"SharedPreference에 아이디 저장됨.");
 
-                // 서버로 사용자 정보 전송
-                sendUserInfoToServer(String.valueOf(user.getId()), user.getKakaoAccount().getPhoneNumber(), user.getKakaoAccount().getName(), user.getKakaoAccount().getEmail());
+                // 서버로 사용자 정보와 Firebase 토큰 전송
+                sendUserInfoToServer(String.valueOf(user.getId()), user.getKakaoAccount().getPhoneNumber(), user.getKakaoAccount().getName(), user.getKakaoAccount().getEmail(), fcmToken);
 
                 // 홈 액티비티로 이동
                 moveToHomeActivity();
@@ -105,13 +110,12 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    // 서버로 사용자 정보 전송
-    private void sendUserInfoToServer(String userId, String phoneNumber, String name, String email) {
+    private void sendUserInfoToServer(String userId, String phoneNumber, String name, String email, String fcmToken) {
         OkHttpClient client = new OkHttpClient();
 
-        // JSON 형식으로 사용자 정보 구성
+        // JSON 형식으로 사용자 정보와 Firebase 토큰 구성
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        String jsonBody = "{\"userId\": \"" + userId + "\", \"phoneNumber\": \"" + phoneNumber + "\", \"name\": \"" + name + "\", \"email\": \"" + email + "\"}";
+        String jsonBody = "{\"userId\": \"" + userId + "\", \"phoneNumber\": \"" + phoneNumber + "\", \"name\": \"" + name + "\", \"email\": \"" + email + "\", \"fcmToken\": \"" + fcmToken + "\"}";
         RequestBody requestBody = RequestBody.create(JSON, jsonBody);
 
         // HTTP 요청 생성
@@ -130,7 +134,7 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    Log.i(TAG, "서버 응답 성공2");
+                    Log.i(TAG, "서버 응답 성공");
                     // 서버 응답에 따른 처리
                 } else {
                     Log.e(TAG, "서버 응답 실패: " + response.code());
@@ -139,8 +143,6 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-
-    // 홈 액티비티로 이동
     private void moveToHomeActivity() {
         Intent intent = new Intent(LoginScreen.this, HomeActivity.class);
         startActivity(intent);
