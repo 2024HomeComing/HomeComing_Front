@@ -77,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
                         if (throwable == null) {
                             navigateToHomeActivity();
                             // 로그 출력
-                            Log.d("Token Refresh", "토큰 갱신 성공");
+                            Log.d("KaKao Token Refresh", "토큰 갱신 성공");
                         } else {
                             // 토큰 갱신 실패
                             navigateToLoginActivity(); // 예시로 로그인 화면으로 이동하는 처리를 함
                             // 로그 출력
-                            Log.d("Token Refresh", "토큰 갱신 실패");
+                            Log.d("KaKao Token Refresh", "토큰 갱신 실패");
                         }
                         return null;
                     }
