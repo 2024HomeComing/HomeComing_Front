@@ -28,6 +28,7 @@ public class Notification extends Fragment {
     private List<NotificationModel> notificationList;
     private FirebaseFirestore db;
     private static final String TAG = "NotificationFragment";
+    private String userId; // 현재 로그인한 사용자의 ID
 
     @Nullable
     @Override
@@ -41,7 +42,17 @@ public class Notification extends Fragment {
         recyclerView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
-        loadNotifications();
+
+        // UserManager를 사용해 userId 가져오기
+        userId = UserManager.getUserId(getContext()); // userId 가져오기
+
+        // 조회한 userId 로그로 출력
+        if (userId != null) {
+            Log.d(TAG, "Retrieved userId: " + userId); // userId 출력
+            loadNotifications(userId); // userId가 존재할 때만 알림 로드
+        } else {
+            Log.w(TAG, "userId is null");
+        }
 
         // ItemTouchHelper 설정
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -63,8 +74,9 @@ public class Notification extends Fragment {
         return view;
     }
 
-    private void loadNotifications() {
+    private void loadNotifications(String userId) {
         db.collection("notifications")
+                .whereEqualTo("providerId", userId) // Firestore 쿼리에서 userId와 일치하는 문서만 가져오기
                 .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override

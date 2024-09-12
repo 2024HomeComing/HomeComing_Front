@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int DELAY_TIME_MILLIS = 3000;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         // 두 번째 ImageView에는 블러 처리하지 않은 로고 이미지 설정
         loadinLogoImageView.setImageBitmap(originalLogoBitmap);
 
-        //앱 실행시 프리펀스에서 싱글톤으로 아이디 적재
+        // 앱 실행 시 프리퍼런스에서 사용자 아이디를 싱글톤에 적재
         String userId = UserManager.getUserId(getApplicationContext());
         if (userId != null) {
             SingletonClass.getInstance().setUserId(userId);
@@ -49,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
         // 배경 이미지 가져오기 (블러 처리 적용)
         new LoadBlurryBackgroundTask(blurImageView).execute(R.drawable.loadingscreen);
 
-        // Delay for 3 seconds before transitioning to HomeActivity if user is logged in
+        // 3초 후에 로그인 상태 확인 후 HomeActivity로 이동
         new Handler().postDelayed(() -> {
-            // Check if user is logged in
+            // 로그인 상태 확인 및 네비게이션 처리
             checkLoginStatusAndNavigate();
         }, DELAY_TIME_MILLIS);
     }

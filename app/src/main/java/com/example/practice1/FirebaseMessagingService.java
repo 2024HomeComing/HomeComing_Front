@@ -27,27 +27,27 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // Log the message for testing purposes
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "onMessageReceived called");
 
-        if (remoteMessage.getNotification() != null) {
-            String title = remoteMessage.getNotification().getTitle();
-            String msg = remoteMessage.getNotification().getBody();
-            Log.d(TAG, "Message Notification Title: " + title);
-            Log.d(TAG, "Message Notification Body: " + msg);
+        if (remoteMessage.getData().size() > 0) {
+            // 데이터 메시지 처리
+            String title = remoteMessage.getData().get("title");
+            String body = remoteMessage.getData().get("body");
+            String userId = remoteMessage.getData().get("userId");
 
-            // 알림을 Firestore에 저장
-            saveNotificationToFirestore(title, msg);
+            Log.d(TAG, "Data message - Title: " + title);
+            Log.d(TAG, "Data message - Body: " + body);
 
-            // 사용자에게 알림 표시
-            sendNotification(title, msg);
+            // 알림 저장 및 표시
+            saveNotificationToFirestore(title, body, userId);
+            sendNotification(title, body);
         } else {
-            Log.d(TAG, "Message Notification is null");
+            Log.d(TAG, "No data in message");
         }
     }
 
-    private void saveNotificationToFirestore(String title, String msg) {
-        NotificationModel notification = new NotificationModel(title, msg, System.currentTimeMillis());
+    private void saveNotificationToFirestore(String title, String msg, String userId) {
+        NotificationModel notification = new NotificationModel(title, msg, System.currentTimeMillis(), userId);  // userId 포함
         db.collection("notifications")
                 .add(notification)
                 .addOnSuccessListener(documentReference -> {
