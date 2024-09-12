@@ -3,11 +3,11 @@ package com.example.practice1;
 import com.example.practice1.dto.Board;
 import com.example.practice1.dto.MatchResult;
 import com.example.practice1.dto.PetInfo;
-import com.example.practice1.dto.ProfileUpdateDto;
+
 import com.example.practice1.dto.Report;
 import com.example.practice1.dto.SightingBoard;
 import com.example.practice1.dto.UserProfile;
-import com.kakao.sdk.user.model.User;
+
 
 import java.util.List;
 

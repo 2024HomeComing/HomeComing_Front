@@ -5,11 +5,21 @@ public class NotificationModel {
     private String title;
     private String message;
     private long timestamp;
+    private String providerId; // 사용자 ID 추가
 
+    // Firestore를 위한 기본 생성자
     public NotificationModel() {
-        // Firestore를 위한 기본 생성자
     }
 
+    // 4개의 인자를 받는 생성자
+    public NotificationModel(String title, String message, long timestamp, String providerId) {
+        this.title = title;
+        this.message = message;
+        this.timestamp = timestamp;
+        this.providerId = providerId;
+    }
+
+    // 3개의 인자를 받는 생성자 추가 (userId 없이)
     public NotificationModel(String title, String message, long timestamp) {
         this.title = title;
         this.message = message;
@@ -34,5 +44,13 @@ public class NotificationModel {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 }

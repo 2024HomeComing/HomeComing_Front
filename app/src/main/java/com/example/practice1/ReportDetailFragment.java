@@ -9,12 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.practice1.dto.Report;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
