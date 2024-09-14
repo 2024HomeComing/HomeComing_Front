@@ -10,6 +10,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -33,21 +34,22 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             // 데이터 메시지 처리
             String title = remoteMessage.getData().get("title");
             String body = remoteMessage.getData().get("body");
-            String userId = remoteMessage.getData().get("userId");
+            String userId = remoteMessage.getData().get("userId"); // 사용자 ID로 변경
+            String reportId = remoteMessage.getData().get("reportId"); // reportId 추가
 
             Log.d(TAG, "Data message - Title: " + title);
             Log.d(TAG, "Data message - Body: " + body);
 
             // 알림 저장 및 표시
-            saveNotificationToFirestore(title, body, userId);
+            saveNotificationToFirestore(title, body, userId, reportId);
             sendNotification(title, body);
         } else {
             Log.d(TAG, "No data in message");
         }
     }
 
-    private void saveNotificationToFirestore(String title, String msg, String userId) {
-        NotificationModel notification = new NotificationModel(title, msg, System.currentTimeMillis(), userId);  // userId 포함
+    private void saveNotificationToFirestore(String title, String msg, String providerId, String reportId) {
+        NotificationModel notification = new NotificationModel(title, msg, System.currentTimeMillis(), providerId, reportId);  // providerId 및 reportId 포함
         db.collection("notifications")
                 .add(notification)
                 .addOnSuccessListener(documentReference -> {

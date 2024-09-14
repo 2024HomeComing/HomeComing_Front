@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class Notification extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         notificationList = new ArrayList<>();
-        adapter = new NotificationAdapter(notificationList);
+        adapter = new NotificationAdapter(notificationList, getContext());
         recyclerView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
@@ -53,6 +54,12 @@ public class Notification extends Fragment {
         } else {
             Log.w(TAG, "userId is null");
         }
+
+        // 알림 아이템 클릭 리스너 설정
+        adapter.setOnItemClickListener(notification -> {
+            Log.d(TAG, "Clicked Notification reportId: " + notification.getReportId()); // reportId 로그 출력
+            openReportDetailFragment(Long.valueOf(notification.getReportId())); // ReportDetailFragment로 이동
+        });
 
         // ItemTouchHelper 설정
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -103,5 +110,19 @@ public class Notification extends Fragment {
                 .delete()
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully deleted!"))
                 .addOnFailureListener(e -> Log.w(TAG, "Error deleting notification", e));
+    }
+
+    private void openReportDetailFragment(Long reportId) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        Fragment fragment = new ReportDetailFragment();
+
+        Bundle args = new Bundle();
+        args.putLong("reportId", reportId);
+        fragment.setArguments(args);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment) // Ensure `fragment_container` is the ID of your container view
+                .addToBackStack(null)
+                .commit();
     }
 }
