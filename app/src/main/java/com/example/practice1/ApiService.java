@@ -1,6 +1,7 @@
 package com.example.practice1;
 
 import com.example.practice1.dto.Board;
+import com.example.practice1.dto.Comment;
 import com.example.practice1.dto.MatchResult;
 import com.example.practice1.dto.PetInfo;
 
@@ -13,6 +14,8 @@ import java.util.List;
 
 import retrofit2.Call;
 
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 
 import retrofit2.http.PUT;
@@ -47,6 +50,17 @@ public interface ApiService {
             @Part("board") RequestBody board,
             @Part List<MultipartBody.Part> image
     );
+
+    @POST("comments")
+    Call<Comment> addComment(@Body Comment comment);
+
+    // 게시글의 댓글 조회
+    @GET("comments/board/{boardId}")
+    Call<List<Comment>> getCommentsByBoardId(@Path("boardId") Long boardId);
+
+    // 댓글 삭제
+    @DELETE("comments/delete/{id}")
+    Call<ResponseBody> deleteCommentById(@Path("id") Long commentId);
     @GET("match/{boardId}")
     Call<MatchResult>findBestMatch(@Path("boardId")Long boardId);
 
@@ -77,6 +91,22 @@ public interface ApiService {
     //오늘 올라온 목격 게시글 전체 개수 확인
     @GET("sighting/count/today")
     Call<Long> countSightingPostsToday();
+
+    @POST("Scomments")
+    Call<Comment> addSightingComment(@Body Comment comment);
+
+    // 목격 게시글에 대한 댓글 조회
+    @GET("Scomments/sighting/{sightingId}")
+    Call<List<Comment>> getSightingCommentsById(@Path("sightingId") Long sightingId);
+
+    // 댓글 수정
+    @PUT("Scomments/update/{id}")
+    Call<ResponseBody> updateComments(@Path("id") Long commentId, @Body Comment comment);
+
+    // 댓글 삭제
+    @DELETE("Scomments/delete/{id}")
+    Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId);
+
 
     @Multipart
     @PUT("users/profile_update")
