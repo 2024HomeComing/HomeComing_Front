@@ -8,10 +8,6 @@ public class Scomment {
     private Long sightingId;     // 게시글 ID (어떤 게시글에 속하는 댓글인지)
     private String userId;    // 사용자 ID
 
-    // 기본 생성자
-    public Scomment() {
-    }
-
     // 생성자
     public Scomment(Long id, String writer, String content, String time, Long sightingId, String userId) {
         this.id = id;
@@ -23,6 +19,10 @@ public class Scomment {
     }
 
     public Scomment(String userId, String content, String currentTime, Long sightingId) {
+    }
+
+
+    public Scomment(String content, long sightingId, String userId) {
     }
 
     // Getter & Setter 메서드

@@ -6,6 +6,7 @@ import com.example.practice1.dto.MatchResult;
 import com.example.practice1.dto.PetInfo;
 
 import com.example.practice1.dto.Report;
+import com.example.practice1.dto.Scomment;
 import com.example.practice1.dto.SightingBoard;
 import com.example.practice1.dto.UserProfile;
 
@@ -92,23 +93,22 @@ public interface ApiService {
     @GET("sighting/count/today")
     Call<Long> countSightingPostsToday();
 
-    @POST("Scomments")
-    Call<Comment> addSightingComment(@Body Comment comment);
+ @POST("Scomments")
+ Call<Scomment> addSightingComment(@Body Scomment scomment);
 
-    // 목격 게시글에 대한 댓글 조회
-    @GET("Scomments/sighting/{sightingId}")
-    Call<List<Comment>> getSightingCommentsById(@Path("sightingId") Long sightingId);
+ @GET("Scomments/board/{sightingId}")
+ Call<List<Scomment>> getSightingCommentsById(@Path("sightingId") Long sightingId);
 
-    // 댓글 수정
-    @PUT("Scomments/update/{id}")
-    Call<ResponseBody> updateComments(@Path("id") Long commentId, @Body Comment comment);
+ @PUT("Scomments/update/{id}")
+ Call<ResponseBody> updateComments(@Path("id") Long commentId, @Body Scomment scomment);
 
-    // 댓글 삭제
-    @DELETE("Scomments/delete/{id}")
-    Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId);
+ @DELETE("Scomments/delete/{id}")
+ Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId);
 
 
-    @Multipart
+
+
+ @Multipart
     @PUT("users/profile_update")
     Call<ResponseBody> updateProfile(
             @Part MultipartBody.Part image,
