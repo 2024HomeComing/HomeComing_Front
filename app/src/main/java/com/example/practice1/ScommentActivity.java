@@ -2,7 +2,6 @@ package com.example.practice1;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,51 +25,56 @@ import retrofit2.Response;
 public class ScommentActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private RecyclerView commentsRecyclerView;
     private ScommentAdapter scommentAdapter;
     private List<Scomment> scommentList;
     private ApiService apiService;
     private EditText commentInput;
     private Button btnPost;
+    private long sightingId; // 게시물 ID를 저장할 변수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_written_witness);
+        setContentView(R.layout.fragment_written_witness); // 레이아웃 수정 (이 부분을 실제 레이아웃 파일로 변경하세요)
 
         // RecyclerView 설정
-        recyclerView = findViewById(R.id.commentRecyclerView);
+        recyclerView = findViewById(R.id.commentsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // EditText와 Button을 초기화
+        // EditText와 Button 초기화
         commentInput = findViewById(R.id.commentEditText);
         btnPost = findViewById(R.id.postCommentButton);
 
         // ApiService 초기화
-        apiService = ApiClient.createService();  // No arguments
+        apiService = ApiClient.createService(); // 인자 없이 초기화
 
-        // 게시글 ID 가져오기 (Intent에서 받아온다 가정)
-        Long sightingId = getIntent().getLongExtra("sightingId", -1);
+        // Intent에서 게시물 ID 가져오기
+        sightingId = getIntent().getLongExtra("sightingId", -1);
+        if (sightingId == -1) {
+            Log.e("ScommentActivity", "Invalid sightingId");
+            Toast.makeText(this, "게시물 ID가 유효하지 않습니다.", Toast.LENGTH_SHORT).show();
+            finish(); // 잘못된 ID일 경우 종료
+            return;
+        }
 
         // 서버에서 댓글 데이터를 불러옴
         fetchComments(sightingId);
 
         // 댓글 작성 버튼 클릭 리스너 설정
-        btnPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String commentContent = commentInput.getText().toString();
-                if (!commentContent.isEmpty()) {
-                    postComment(sightingId, commentContent);
-                } else {
-                    Log.d("ScommentActivity", "댓글을 입력해 주세요.");
-                    Toast.makeText(ScommentActivity.this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show();
-                }
+        btnPost.setOnClickListener(v -> {
+            String commentContent = commentInput.getText().toString().trim();
+            if (!commentContent.isEmpty()) {
+                postsComment(sightingId, commentContent);
+            } else {
+                Log.d("ScommentActivity", "댓글을 입력해 주세요.");
+                Toast.makeText(ScommentActivity.this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     // 서버에서 댓글을 가져오는 메서드
-    private void fetchComments(Long sightingId) {
+    private void fetchComments(long sightingId) {
         Log.d("fetchComments", "Fetching comments for sightingId: " + sightingId);
 
         apiService.getSightingCommentsById(sightingId).enqueue(new Callback<List<Scomment>>() {
@@ -82,7 +86,7 @@ public class ScommentActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     scommentList = response.body();
                     String userId = UserManager.getUserId(ScommentActivity.this);
-                    scommentAdapter = new ScommentAdapter(ScommentActivity.this, apiService, scommentList, userId);
+                    scommentAdapter = new ScommentAdapter(ScommentActivity.this, apiService, scommentList, userId, commentsRecyclerView);
                     recyclerView.setAdapter(scommentAdapter);
                     Log.d("fetchComments", "Comments fetched successfully.");
                 } else {
@@ -106,52 +110,38 @@ public class ScommentActivity extends AppCompatActivity {
     }
 
     // 댓글 작성 메서드
-    private void postComment(Long sightingId, String content) {
-        // 현재 시간을 문자열로 변환
+    private void postsComment(long sightingId, String content) {
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-
-        // 현재 로그인한 사용자의 userId를 가져옴
         String userId = UserManager.getUserId(this);
 
         // Scomment 객체 생성
         Scomment newComment = new Scomment(userId, content, currentTime, sightingId);
 
-        // 로그로 전송할 데이터 확인
-        Log.d("postComment", "Posting comment:");
-        Log.d("postComment", "User ID: " + userId);
-        Log.d("postComment", "Content: " + content);
-        Log.d("postComment", "Time: " + currentTime);
-        Log.d("postComment", "Sighting ID: " + sightingId);
-
-        // 댓글 작성 API 호출
-        apiService.addSightingComment(newComment).enqueue(new Callback<Scomment>() {
+        // API 호출
+        apiService.addScomment(newComment).enqueue(new Callback<Scomment>() {
             @Override
             public void onResponse(Call<Scomment> call, Response<Scomment> response) {
-                Log.d("postComment", "Response code: " + response.code());
-                Log.d("postComment", "Response message: " + response.message());
+                Log.d("postsComment", "Response code: " + response.code());
+                Log.d("postsComment", "Response message: " + response.message());
 
                 if (response.isSuccessful()) {
-                    // 성공 시, 새로운 댓글을 리스트에 추가하고 RecyclerView 업데이트
                     Scomment postedComment = response.body();
-                    Log.d("postComment", "Posted Comment: " + (postedComment != null ? postedComment.toString() : "null"));
-
                     if (postedComment != null) {
                         scommentList.add(postedComment);
                         scommentAdapter.notifyDataSetChanged();
                     }
-                    commentInput.setText("");  // 댓글 입력란 비우기
+                    commentInput.setText(""); // 댓글 입력란 비우기
                     Toast.makeText(ScommentActivity.this, "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // 응답 실패 시, 오류 본문 로그
-                    Log.e("postComment", "Failed to post comment: " + response.message());
+                    Log.e("postsComment", "Failed to post comment: " + response.message());
                     try {
                         if (response.errorBody() != null) {
-                            Log.e("postComment", "Error body: " + response.errorBody().string());
+                            Log.e("postsComment", "Error body: " + response.errorBody().string());
                         } else {
-                            Log.e("postComment", "Error body is null.");
+                            Log.e("postsComment", "Error body is null.");
                         }
                     } catch (IOException e) {
-                        Log.e("postComment", "Error reading error body", e);
+                        Log.e("postsComment", "Error reading error body", e);
                     }
                     Toast.makeText(ScommentActivity.this, "댓글 작성에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -159,7 +149,7 @@ public class ScommentActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Scomment> call, Throwable t) {
-                Log.e("postComment", "Error during API call", t);
+                Log.e("postsComment", "Error during API call", t);
                 Toast.makeText(ScommentActivity.this, "서버와의 통신에 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
         });

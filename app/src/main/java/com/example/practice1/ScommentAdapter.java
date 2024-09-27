@@ -23,21 +23,22 @@ import retrofit2.Response;
 public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.ScommentViewHolder> {
 
     private Context context;
+    private RecyclerView commentsRecyclerView;
     private ApiService apiService;
-    private List<Scomment> commentList;  // 변경된 필드, Scomment를 처리
+    private List<Scomment> commentsList;  // 변경된 필드
     private String userId;  // 사용자 ID 필드
 
     // 생성자 수정
-    public ScommentAdapter(Context context, ApiService apiService, List<Scomment> commentList, String userId) {
+    public ScommentAdapter(Context context, ApiService apiService, List<Scomment> commentsList, String userId, RecyclerView commentsRecyclerView) {
         this.context = context;
         this.apiService = apiService;
-        this.commentList = commentList;
+        this.commentsList = commentsList;  // 수정된 필드
         this.userId = userId;
+        this.commentsRecyclerView = commentsRecyclerView;
     }
 
-
     public void setComments(List<Scomment> comments) {
-        this.commentList = comments;
+        this.commentsList = comments;  // 수정된 필드
         notifyDataSetChanged(); // RecyclerView가 데이터 변경을 인식하도록 갱신
     }
 
@@ -50,16 +51,10 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
 
     @Override
     public void onBindViewHolder(@NonNull ScommentViewHolder holder, int position) {
-        Scomment scomment = commentList.get(position);
+        Scomment scomment = commentsList.get(position);  // 수정된 필드
         holder.writerTextView.setText(scomment.getWriter());
         holder.commentTextView.setText(scomment.getContent());
         holder.commentTimeTextView.setText(scomment.getTime());
-
-        // 로그에 댓글 정보 출력
-        Log.d("ScommentAdapter", "Sighting Comment at position " + position + ":");
-        Log.d("ScommentAdapter", "Writer: " + scomment.getWriter());
-        Log.d("ScommentAdapter", "Content: " + scomment.getContent());
-        Log.d("ScommentAdapter", "Time: " + scomment.getTime());
 
         // Handle delete button click
         holder.deleteButton.setOnClickListener(v -> {
@@ -70,10 +65,14 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
 
     @Override
     public int getItemCount() {
-        return commentList.size();
+        return commentsList.size();  // 수정된 필드
     }
 
-
+    public void addComment(Scomment comment) {
+        commentsList.add(comment);
+        notifyItemInserted(commentsList.size() - 1);
+        commentsRecyclerView.smoothScrollToPosition(commentsList.size() - 1); // 스크롤 처리
+    }
     // ViewHolder class
     public static class ScommentViewHolder extends RecyclerView.ViewHolder {
         TextView writerTextView;
@@ -87,10 +86,6 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
             commentTextView = itemView.findViewById(R.id.comment);
             commentTimeTextView = itemView.findViewById(R.id.comment_time);
             deleteButton = itemView.findViewById(R.id.btn_delete);
-
-            if (deleteButton == null) {
-                Log.e("ScommentAdapter", "Delete button not found in layout");
-            }
         }
     }
 
@@ -99,13 +94,10 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
         apiService.deleteSightingCommentById(commentId).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("deleteSightingComment", "Response code: " + response.code());
-                Log.d("deleteSightingComment", "Response message: " + response.message());
-
                 if (response.isSuccessful()) {
-                    commentList.remove(position);
+                    commentsList.remove(position);  // 수정된 필드
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, commentList.size());
+                    notifyItemRangeChanged(position, commentsList.size());  // 수정된 필드
                     Log.d("deleteSightingComment", "Sighting comment deleted successfully.");
                 } else {
                     Log.e("deleteSightingComment", "Failed to delete sighting comment: " + response.errorBody());

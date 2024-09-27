@@ -94,19 +94,13 @@ public interface ApiService {
     Call<Long> countSightingPostsToday();
 
  @POST("Scomments")
- Call<Scomment> addSightingComment(@Body Scomment scomment);
+ Call<Scomment> addScomment(@Body Scomment scomment);
 
  @GET("Scomments/board/{sightingId}")
  Call<List<Scomment>> getSightingCommentsById(@Path("sightingId") Long sightingId);
 
- @PUT("Scomments/update/{id}")
- Call<ResponseBody> updateComments(@Path("id") Long commentId, @Body Scomment scomment);
-
  @DELETE("Scomments/delete/{id}")
  Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId);
-
-
-
 
  @Multipart
     @PUT("users/profile_update")
