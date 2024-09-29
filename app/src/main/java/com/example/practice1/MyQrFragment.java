@@ -1,26 +1,27 @@
 package com.example.practice1;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.practice1.dto.PetInfo;
 import com.kakao.sdk.user.UserApiClient;
-import java.util.List;
+
+import java.util.ArrayList;
 
 public class MyQrFragment extends Fragment {
-    private com.example.practice1.MyQrViewModel viewModel;
+    private MyQrViewModel viewModel;
+    private MyQrAdapter myQrAdapter;
 
     public MyQrFragment() {
         super(R.layout.fragment_my_qr);
@@ -32,94 +33,86 @@ public class MyQrFragment extends Fragment {
 
         LinearLayout ifHaveQrLayout = view.findViewById(R.id.ifHaveQr);
         TextView ifNoQrTextView = view.findViewById(R.id.ifNoQr);
-        ImageView generatedQr1 = view.findViewById(R.id.generatedQr1);
-        TextView petname1 = view.findViewById(R.id.petName1);
-        ImageView generatedQr2 = view.findViewById(R.id.generatedQr2);
-        TextView petname2 = view.findViewById(R.id.petName2);
-        ImageView generatedQr3 = view.findViewById(R.id.generatedQr3);
-        TextView petname3 = view.findViewById(R.id.petName3);
         Button btnGetQr = view.findViewById(R.id.btnGetQr);
+        RecyclerView qrRecyclerView = view.findViewById(R.id.qrRecyclerView);
 
         viewModel = new ViewModelProvider(this).get(MyQrViewModel.class);
 
-        generatedQr1.setOnClickListener(v -> showLargeQr(generatedQr1));
-        generatedQr2.setOnClickListener(v -> showLargeQr(generatedQr2));
-        generatedQr3.setOnClickListener(v -> showLargeQr(generatedQr3));
-        // 카카오톡 프로필 정보 가져오기 및 UI 업데이트
+        // MyQrAdapter 초기화
+        myQrAdapter = new MyQrAdapter(
+                new ArrayList<>(),
+                this::showLargeQr,        // QR 클릭 리스너
+                this::deleteQrCode,       // 삭제 리스너
+                this::onPetInfoClick      // PetInfo 클릭 리스너
+        );
+
+        qrRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        qrRecyclerView.setAdapter(myQrAdapter);
+
+        // 카카오 사용자 정보를 통해 PetInfo 로드
         UserApiClient.getInstance().me((user, error) -> {
             if (error != null) {
-                // 에러 처리
                 ifHaveQrLayout.setVisibility(View.GONE);
                 ifNoQrTextView.setVisibility(View.VISIBLE);
             } else if (user != null) {
-                // 사용자 정보에서 ID 가져오기
                 String userId = SingletonClass.getInstance().getUserId();
-
-                // QR 코드를 가져오는 ViewModel 호출
                 viewModel.fetchPetInfo(userId);
 
-                // QR 코드 목록 관찰
-                viewModel.getPetInfoList().observe(getViewLifecycleOwner(), new Observer<List<PetInfo>>() {
-                    @Override
-                    public void onChanged(List<PetInfo> petInfoList) {
-                        if (petInfoList == null || petInfoList.isEmpty()) {
-                            ifHaveQrLayout.setVisibility(View.GONE);
-                            ifNoQrTextView.setVisibility(View.VISIBLE);
-                        } else {
-                            ifHaveQrLayout.setVisibility(View.VISIBLE);
-                            ifNoQrTextView.setVisibility(View.GONE);
-
-                            // QR 코드를 이미지뷰에 설정
-                            loadQrCode(generatedQr1, petInfoList.size() > 0 ? petInfoList.get(0) : null);
-                            loadPetName(petname1, petInfoList.size() > 0 ? petInfoList.get(0) : null);
-                            loadQrCode(generatedQr2, petInfoList.size() > 1 ? petInfoList.get(1) : null);
-                            loadPetName(petname2, petInfoList.size() > 1 ? petInfoList.get(1) : null);
-                            loadQrCode(generatedQr3, petInfoList.size() > 2 ? petInfoList.get(2) : null);
-                            loadPetName(petname3, petInfoList.size() > 2 ? petInfoList.get(2) : null);
-                        }
+                viewModel.getPetInfoList().observe(getViewLifecycleOwner(), petInfoList -> {
+                    if (petInfoList == null || petInfoList.isEmpty()) {
+                        ifHaveQrLayout.setVisibility(View.GONE);
+                        ifNoQrTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        ifHaveQrLayout.setVisibility(View.VISIBLE);
+                        ifNoQrTextView.setVisibility(View.GONE);
+                        myQrAdapter.updatePetInfoList(petInfoList);
                     }
                 });
             }
             return null;
         });
 
-        // btnGetQr 버튼 클릭 이벤트 처리
-        btnGetQr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // CreateQrFragment로 전환
-                CreateQrFragment createQrFragment = new CreateQrFragment();
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, createQrFragment)
-                        .addToBackStack(null)  // 이전 프래그먼트로 돌아갈 수 있도록 스택에 추가
-                        .commit();
-            }
+        // QR 생성 버튼 클릭 이벤트 처리
+        btnGetQr.setOnClickListener(v -> {
+            CreateQrFragment createQrFragment = new CreateQrFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, createQrFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
-    private void loadQrCode(ImageView imageView, PetInfo petInfo) {
-        if (petInfo != null && petInfo.getQrCodeImage() != null) {
-            byte[] qrCodeByteArray = Base64.decode(petInfo.getQrCodeImage(), Base64.DEFAULT);
-            Bitmap qrCodeBitmap = BitmapFactory.decodeByteArray(qrCodeByteArray, 0, qrCodeByteArray.length);
-            imageView.setImageBitmap(qrCodeBitmap);
-        } else {
-            imageView.setImageDrawable(null);
-        }
-    }
-
-    private void loadPetName(TextView textView, PetInfo petInfo) {
-        if (petInfo != null && petInfo.getName() != null) {
-            textView.setText(petInfo.getName());
-        } else {
-            textView.setText("");
-        }
-    }
-
-    private void showLargeQr(ImageView qrImageView) {
-        // QR 이미지를 크게 보여줄 새로운 Fragment를 띄웁니다.
+    private void showLargeQr(Bitmap qrBitmap) {
         FragmentManager fragmentManager = getParentFragmentManager();
-        LargeQrDialogFragment dialogFragment = LargeQrDialogFragment.newInstance(((BitmapDrawable) qrImageView.getDrawable()).getBitmap());
+        LargeQrDialogFragment dialogFragment = LargeQrDialogFragment.newInstance(qrBitmap);
         dialogFragment.show(fragmentManager, "large_qr");
     }
 
+    private void deleteQrCode(Long petId) {
+        viewModel.deleteQr(petId);
+    }
+
+    private void onPetInfoClick(PetInfo petInfo) {
+        Log.d("MyQrFragment", "onPetInfoClick: PetInfo clicked with ID " + petInfo.getId());
+        showQrInfo(petInfo);
+    }
+
+    private void showQrInfo(PetInfo petInfo) {
+        Log.d("MyQrFragment", "showQrInfo: Displaying QrInfoFragment for PetInfo ID " + petInfo.getId());
+
+        QrInfoFragment qrInfoFragment = new QrInfoFragment();
+        Bundle args = new Bundle();
+        args.putLong("PET_INFO_ID", petInfo.getId()); // PetInfo ID 전달
+        qrInfoFragment.setArguments(args);
+
+        // 전달하는 ID를 로그로 확인
+        Log.d("MyQrFragment", "showQrInfo: 전달된 petInfoId = " + petInfo.getId());
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, qrInfoFragment)
+                .addToBackStack(null)
+                .commit();
+
+        Log.d("MyQrFragment", "showQrInfo: QrInfoFragment transaction committed");
+    }
 }
