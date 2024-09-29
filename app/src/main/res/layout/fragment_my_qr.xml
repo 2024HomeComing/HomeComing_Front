@@ -5,111 +5,55 @@
     android:layout_height="match_parent"
     tools:context=".MyQrFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="QR코드 관리"
-            android:textSize="30dp"
-            android:gravity="center"
-            android:padding="16dp" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/ifHaveQr"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginVertical="8dp"
-                android:background="@drawable/rounded_background"
-                android:padding="12dp">
-
-                <TextView
-                    android:id="@+id/petName1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/generatedQr1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                android:text="QR코드 관리"
+                android:textSize="30dp"
+                android:gravity="center"
+                android:padding="16dp" />
 
             <LinearLayout
+                android:id="@+id/ifHaveQr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginVertical="8dp"
-                android:background="@drawable/rounded_background"
-                android:padding="12dp">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/petName2"
-                    android:layout_width="0dp"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/qrRecyclerView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp" />
+                    android:nestedScrollingEnabled="true"/>
 
-                <ImageView
-                    android:id="@+id/generatedQr2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/ifNoQr"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginVertical="8dp"
-                android:background="@drawable/rounded_background"
-                android:padding="12dp">
+                android:text="QR코드가 아직 없으신가요?"
+                android:layout_gravity="center_horizontal"
+                android:textSize="20dp"
+                android:layout_marginTop="16dp" />
 
-                <TextView
-                    android:id="@+id/petName3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="16sp" />
+            <Button
+                android:id="@+id/btnGetQr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/black"
+                android:text="QR코드 새로 발급하기"
+                android:layout_marginTop="16dp" />
 
-                <ImageView
-                    android:id="@+id/generatedQr3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/ifNoQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="QR코드가 아직 없으신가요?"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20dp"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/btnGetQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/black"
-            android:text="QR코드 새로 발급하기"
-            android:layout_marginTop="16dp" />
-
-    </LinearLayout>
-
+    </ScrollView>
 </FrameLayout>

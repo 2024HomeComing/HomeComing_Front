@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QrCode.CreateQrFragment">
+    tools:context=".CreateQrFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,6 +14,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="100dp">
+
+            <ImageButton
+                android:id="@+id/postpetimg"
+                android:src="@drawable/postimg"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="#F0F0F0">
+            </ImageButton>
+
+            <ImageView
+                android:id="@+id/selected_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:visibility="gone" /> <!-- 기본적으로 이미지는 숨겨져 있음 -->
 
             <TextView
                 android:layout_width="match_parent"
