@@ -5,231 +5,136 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/todayDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2024.06.08"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/liveReportStatsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="실시간 신고 통계"
+            android:textSize="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/mm"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/todayDateTextView"
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2024.06.08"
-                android:textSize="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"/>
+                android:layout_weight="1"
+                card_view:cardCornerRadius="8dp"
+                card_view:cardElevation="4dp"
+                android:layout_margin="10dp">
 
-            <TextView
-                android:id="@+id/liveReportStatsTextView"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="오늘 등록된 실종게시물"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/missingPostsCountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="n개"
+                        android:textColor="@android:color/holo_orange_light"
+                        android:textSize="15dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="실시간 신고 통계"
-                android:textSize="25dp"
-                android:layout_below="@id/todayDateTextView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"/>
+                android:layout_weight="1"
+                card_view:cardCornerRadius="8dp"
+                card_view:cardElevation="4dp"
+                android:layout_margin="10dp">
 
-            <LinearLayout
-                android:id="@+id/mm"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오늘 등록된 목격게시물"
+                        android:textSize="15dp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/findPostsCountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="m개"
+                        android:textColor="@android:color/holo_green_light"
+                        android:textSize="15dp"
+                        android:gravity="center" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/homeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:text="오늘 올라온 게시글"
+            android:textSize="25dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="40dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/liveReportStatsTextView"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal">
+                android:scrollbars="vertical" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    card_view:cardCornerRadius="8dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_margin="10dp">
+        </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="10dp">
 
-                        <TextView
-                            android:id="@+id/missingPostsTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="오늘 등록된 실종게시물"
-                            android:textSize="15dp" />
+    </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/missingPostsCountTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="n개"
-                            android:textColor="@android:color/holo_orange_light"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    card_view:cardCornerRadius="8dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_margin="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/findPostsTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="오늘 등록된 목격게시물"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/findPostsCountTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="m개"
-                            android:textColor="@android:color/holo_green_light"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-            <TextView
-                android:id="@+id/homeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/mm"
-                android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:text="오늘 올라온 게시글"
-                android:textSize="25dp" />
-            <LinearLayout
-                android:id="@+id/nn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/homeTextView"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
-
-                <androidx.cardview.widget.CardView
-                    android:background="@drawable/round_edittext_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    card_view:cardCornerRadius="8dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_margin="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/missingPosts"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="목격제보"
-                            android:textSize="15dp" />
-
-                        <TextView
-                            android:id="@+id/missingPosts2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="강아지 보호중이에요!"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:background="@drawable/round_edittext_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    card_view:cardCornerRadius="8dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_margin="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/missingPosts3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="목격제보"
-                            android:textSize="15dp" />
-
-                        <TextView
-                            android:id="@+id/missingPosts4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="고양이 보호중이에요!"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    card_view:cardCornerRadius="8dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_margin="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/missingPosts5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="목격제보"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/missingPosts6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="원숭이 보호중이에요"
-                            android:textSize="15dp"
-                            android:gravity="center"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </RelativeLayout>
-    </ScrollView>
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.example.practice1;
 
+import com.example.practice1.dto.AllboardDto;
 import com.example.practice1.dto.Board;
 import com.example.practice1.dto.Comment;
 import com.example.practice1.dto.MatchResult;
@@ -29,6 +30,7 @@ import okhttp3.ResponseBody;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -51,6 +53,9 @@ public interface ApiService {
             @Part("board") RequestBody board,
             @Part List<MultipartBody.Part> image
     );
+    @DELETE("/api/boards/{userId}/{boardId}")
+    Call<Void> deleteBoard(@Path("userId") String userId, @Path("boardId") Long boardId);
+
 
     @POST("comments")
     Call<Comment> addComment(@Body Comment comment);
@@ -61,7 +66,7 @@ public interface ApiService {
 
     // 댓글 삭제
     @DELETE("comments/delete/{id}")
-    Call<ResponseBody> deleteCommentById(@Path("id") Long commentId);
+    Call<ResponseBody> deleteCommentById(@Path("id") Long commentId, @Query("userId") String userId);
 
     @GET("match/{boardId}")
     Call<MatchResult> findBestMatch(@Path("boardId") Long boardId);
@@ -74,6 +79,9 @@ public interface ApiService {
 
     @GET("boards/user/{userId}")
     Call<List<Board>> getUserBoards(@Path("userId") String userId);
+
+    @GET("/api/boards/count/today")
+    Call<Long>  countPostsToday();
 
     // 목격 게시글 작성
     @Multipart
@@ -102,7 +110,7 @@ public interface ApiService {
     Call<List<Scomment>> getSightingCommentsById(@Path("sightingId") Long sightingId);
 
     @DELETE("Scomments/delete/{id}")
-    Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId);
+    Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId, @Query("userId") String userId);
 
     @Multipart
     @PUT("users/profile_update")
@@ -138,4 +146,7 @@ public interface ApiService {
     // QR 정보 조회
     @GET("pets/petInfo/{petInfoId}")
     Call<PetInfo> getPetById(@Path("petInfoId") Long petInfoId);
+
+    @GET("/api/boards/alltoday")
+    Call<List<AllboardDto>> getTodayAll();
 }

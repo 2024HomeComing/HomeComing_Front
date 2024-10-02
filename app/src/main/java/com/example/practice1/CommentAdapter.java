@@ -61,7 +61,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             // Handle delete button click
             holder.deleteButton.setOnClickListener(v -> {
                 Long commentId = comment.getId();
-                deleteComment(commentId, position);
+                deleteComment(commentId, position, userId);
             });
         } else if (commentList.get(position) instanceof Scomment) {
             Scomment scomment = (Scomment) commentList.get(position);
@@ -75,10 +75,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             Log.d("CommentAdapter", "Content: " + scomment.getContent());
             Log.d("CommentAdapter", "Time: " + scomment.getTime());
 
+
             // Handle delete button click
             holder.deleteButton.setOnClickListener(v -> {
                 Long commentId = scomment.getId();
-                deleteSightingComment(commentId, position);
+                deleteSightingComment(commentId, position, userId);
             });
         }
     }
@@ -109,8 +110,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     // Method to delete a comment
-    private void deleteComment(Long commentId, int position) {
-        apiService.deleteCommentById(commentId).enqueue(new Callback<ResponseBody>() {
+    private void deleteComment(Long commentId, int position, String userId) {
+        apiService.deleteCommentById(commentId, userId).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.d("deleteComment", "Response code: " + response.code());
@@ -128,14 +129,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("deleteComment", "API call error", t);
+                Log.e("deleteComment", "Error: " + t.getMessage());
             }
         });
     }
 
     // Method to delete a sighting comment
-    private void deleteSightingComment(Long commentId, int position) {
-        apiService.deleteSightingCommentById(commentId).enqueue(new Callback<ResponseBody>() {
+    private void deleteSightingComment(Long commentId, int position, String userId) {
+        apiService.deleteSightingCommentById(commentId, userId).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.d("deleteSightingComment", "Response code: " + response.code());

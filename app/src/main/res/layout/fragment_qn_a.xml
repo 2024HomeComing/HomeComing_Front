@@ -1,38 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".QnAFragment">
+    android:layout_height="wrap_content"
+    android:paddingBottom="60dp"
+    android:fillViewport="true">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="QnA"
-            android:layout_gravity="center_horizontal"
-            android:textSize="40dp">
-        </TextView>
+        android:padding="16dp"
+        android:background="@android:color/white">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="18dp"
-            android:text="질문을 통해 앱 사용법을 익혀보세요!">
-        </TextView>
+            android:text="자주 묻는 질문"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FAQ (frequently asked question)"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="30dp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <!-- 질문 버튼들 -->
 
         <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/question1_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:text="캡쳐한 QR코드는 어떻게 사용하는건가요?"
-            android:layout_gravity="center_horizontal">
-        </Button>
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#D3D3D3"
+            android:gravity="start"
+            android:padding="16dp"
+            android:text="♤ 질문1 : 여기에 질문 내용을 넣습니다."
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/answer1_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="♠ 여기에 답변 내용을 넣습니다."
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/question2_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="♤ 질문 2: 여기에 질문 내용을 넣습니다."
+            android:textSize="18sp"
+            android:gravity="start"
+            android:backgroundTint="#D3D3D3"
+            android:textColor="@android:color/black"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/answer2_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="답변 2: 여기에 답변 내용을 넣습니다."
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/question3_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="♤ 질문 3: 여기에 질문 내용을 넣습니다."
+            android:textSize="18sp"
+            android:gravity="start"
+            android:backgroundTint="#D3D3D3"
+            android:textColor="@android:color/black"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/answer3_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="답변 3: 여기에 답변 내용을 넣습니다."
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/question4_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="♤ 질문 4: 여기에 질문 내용을 넣습니다."
+            android:textSize="18sp"
+            android:gravity="start"
+            android:backgroundTint="#D3D3D3"
+            android:textColor="@android:color/black"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/answer4_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="답변 4: 여기에 답변 내용을 넣습니다."
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/question5_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="♤ 질문 5: 여기에 질문 내용을 넣습니다."
+            android:textSize="18sp"
+            android:gravity="start"
+            android:backgroundTint="#D3D3D3"
+            android:textColor="@android:color/black"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/answer5_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="답변 5: 여기에 답변 내용을 넣습니다."
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
     </LinearLayout>
-</FrameLayout>
+</ScrollView>
