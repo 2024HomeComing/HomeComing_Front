@@ -168,7 +168,7 @@
                     android:id="@+id/btn_qna"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="QnA"
+                    android:text="FAQ"
                     android:textAlignment="textStart"
                     android:drawableEnd="@drawable/mypagebtn"
                     android:textColor="@color/black"

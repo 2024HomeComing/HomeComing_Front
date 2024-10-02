@@ -29,6 +29,7 @@ import okhttp3.ResponseBody;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -61,7 +62,7 @@ public interface ApiService {
 
     // 댓글 삭제
     @DELETE("comments/delete/{id}")
-    Call<ResponseBody> deleteCommentById(@Path("id") Long commentId);
+    Call<ResponseBody> deleteCommentById(@Path("id") Long commentId, @Query("userId") String userId);
 
     @GET("match/{boardId}")
     Call<MatchResult> findBestMatch(@Path("boardId") Long boardId);
@@ -102,7 +103,7 @@ public interface ApiService {
     Call<List<Scomment>> getSightingCommentsById(@Path("sightingId") Long sightingId);
 
     @DELETE("Scomments/delete/{id}")
-    Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId);
+    Call<ResponseBody> deleteSightingCommentById(@Path("id") Long commentId, @Query("userId") String userId);
 
     @Multipart
     @PUT("users/profile_update")

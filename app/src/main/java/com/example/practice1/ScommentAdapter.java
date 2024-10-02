@@ -56,10 +56,11 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
         holder.commentTextView.setText(scomment.getContent());
         holder.commentTimeTextView.setText(scomment.getTime());
 
+        // 본인 댓글일 경우 삭제 버튼 보이기
         // Handle delete button click
         holder.deleteButton.setOnClickListener(v -> {
             Long commentId = scomment.getId();
-            deleteSightingComment(commentId, position);
+            deleteSightingComment(commentId, position, userId);
         });
     }
 
@@ -73,6 +74,7 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
         notifyItemInserted(commentsList.size() - 1);
         commentsRecyclerView.smoothScrollToPosition(commentsList.size() - 1); // 스크롤 처리
     }
+
     // ViewHolder class
     public static class ScommentViewHolder extends RecyclerView.ViewHolder {
         TextView writerTextView;
@@ -90,8 +92,8 @@ public class ScommentAdapter extends RecyclerView.Adapter<ScommentAdapter.Scomme
     }
 
     // Method to delete a sighting comment
-    private void deleteSightingComment(Long commentId, int position) {
-        apiService.deleteSightingCommentById(commentId).enqueue(new Callback<ResponseBody>() {
+    private void deleteSightingComment(Long commentId, int position, String userId) {
+        apiService.deleteSightingCommentById(commentId, userId).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

@@ -95,6 +95,15 @@ public class MypageFragment extends Fragment {
             });
         });
 
+        Button qnaButton = view.findViewById(R.id.btn_qna);
+        qnaButton.setOnClickListener(v -> {
+            QnAFragment qnaFragment = new QnAFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, qnaFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
         // "report_for_me" 버튼 클릭 이벤트 처리
         Button reportForMeButton = view.findViewById(R.id.report_for_me);
         reportForMeButton.setOnClickListener(v -> {
