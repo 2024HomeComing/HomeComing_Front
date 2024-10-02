@@ -127,7 +127,7 @@ public class MissingReportFragment extends Fragment {
                 public void onClick(View v) {
                     // 클릭된 게시글의 boardId를 가져와서 WrittenMissingFragment로 전달
                     long boardId = report.getId();
-                    Fragment fragment = WrittenMissingFragment.newInstance(String.valueOf(boardId));
+                    Fragment fragment = WrittenMissingFragment.newInstance(Long.parseLong(String.valueOf(boardId)));
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, fragment);
                     transaction.addToBackStack(null);

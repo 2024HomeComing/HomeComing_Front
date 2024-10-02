@@ -161,7 +161,7 @@ public class ManageReportFragment extends Fragment {
             // mtitle 버튼 클릭 이벤트 처리
             holder.mtitle.setOnClickListener(v -> {
                 // 해당 보고서의 ID를 가져와 WrittenMissingFragment로 전환
-                Fragment fragment = WrittenMissingFragment.newInstance(String.valueOf(board.getId()));
+                Fragment fragment = WrittenMissingFragment.newInstance(Long.parseLong(String.valueOf(board.getId())));
                 getParentFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack(null)

@@ -1,5 +1,6 @@
 package com.example.practice1;
 
+import com.example.practice1.dto.AllboardDto;
 import com.example.practice1.dto.Board;
 import com.example.practice1.dto.Comment;
 import com.example.practice1.dto.MatchResult;
@@ -52,6 +53,9 @@ public interface ApiService {
             @Part("board") RequestBody board,
             @Part List<MultipartBody.Part> image
     );
+    @DELETE("/api/boards/{userId}/{boardId}")
+    Call<Void> deleteBoard(@Path("userId") String userId, @Path("boardId") Long boardId);
+
 
     @POST("comments")
     Call<Comment> addComment(@Body Comment comment);
@@ -75,6 +79,9 @@ public interface ApiService {
 
     @GET("boards/user/{userId}")
     Call<List<Board>> getUserBoards(@Path("userId") String userId);
+
+    @GET("/api/boards/count/today")
+    Call<Long>  countPostsToday();
 
     // 목격 게시글 작성
     @Multipart
@@ -139,4 +146,7 @@ public interface ApiService {
     // QR 정보 조회
     @GET("pets/petInfo/{petInfoId}")
     Call<PetInfo> getPetById(@Path("petInfoId") Long petInfoId);
+
+    @GET("/api/boards/alltoday")
+    Call<List<AllboardDto>> getTodayAll();
 }

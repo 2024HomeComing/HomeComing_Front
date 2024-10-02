@@ -247,10 +247,10 @@ public class WrittenMissingFragment extends Fragment {
     }
 
     // newInstance 메서드: Fragment 생성 및 ID 전달
-    public static WrittenMissingFragment newInstance(String boardId) {
+    public static WrittenMissingFragment newInstance(long boardId) {
         WrittenMissingFragment fragment = new WrittenMissingFragment();
         Bundle args = new Bundle();
-        args.putString("boardId", boardId);
+        args.putString("boardId", String.valueOf(boardId));
         fragment.setArguments(args);
         return fragment;
     }
