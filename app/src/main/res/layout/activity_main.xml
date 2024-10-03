@@ -5,30 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffec8f"
+    android:gravity="center"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/mainactivity"
+        android:src="@drawable/mainactivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center">
+    </ImageView>
+
+    <View
+        android:id="@+id/black_line"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!-- 첫 번째 이미지뷰 (배경) -->
-        <ImageView
-            android:id="@+id/blurImageView"
-            android:src="@drawable/loadingscreen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop">
-        </ImageView>
-
-        <!-- 두 번째 이미지뷰 (앞으로 나오는 이미지) -->
-        <ImageView
-            android:id="@+id/loadinlogo"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_gravity="center"
-            android:src="@drawable/logo">
-        </ImageView>
-
-    </FrameLayout>
+        android:layout_height="5dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/black" />
 
 </LinearLayout>
