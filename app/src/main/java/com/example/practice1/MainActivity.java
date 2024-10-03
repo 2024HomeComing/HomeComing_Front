@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
@@ -27,17 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 첫 번째 ImageView 가져오기 (배경)
-        ImageView blurImageView = findViewById(R.id.blurImageView);
+        ImageView imageView = findViewById(R.id.mainactivity);
 
-        // 두 번째 ImageView 가져오기 (로고)
-        ImageView loadinLogoImageView = findViewById(R.id.loadinlogo);
+        // 핸드폰의 전체 세로 길이 가져오기
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-        // 로고 이미지 가져오기 (블러 처리하지 않은 원본 이미지)
-        Bitmap originalLogoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+        // 이미지뷰의 크기를 세로 길이의 5분의 2로 설정
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        params.width = screenHeight * 2 / 5;  // 세로 길이의 5분의 2로 가로, 세로 설정
+        params.height = screenHeight * 2 / 5;
+        imageView.setLayoutParams(params);
 
-        // 두 번째 ImageView에는 블러 처리하지 않은 로고 이미지 설정
-        loadinLogoImageView.setImageBitmap(originalLogoBitmap);
 
         // 앱 실행 시 프리퍼런스에서 사용자 아이디를 싱글톤에 적재
         String userId = UserManager.getUserId(getApplicationContext());
@@ -45,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
             SingletonClass.getInstance().setUserId(userId);
         }
 
-        // 배경 이미지 가져오기 (블러 처리 적용)
-        new LoadBlurryBackgroundTask(blurImageView).execute(R.drawable.loadingscreen);
 
         // 3초 후에 로그인 상태 확인 후 HomeActivity로 이동
         new Handler().postDelayed(() -> {

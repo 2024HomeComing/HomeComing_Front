@@ -117,55 +117,89 @@ public class ManageReportFragment extends Fragment {
 
             // AI 비교 버튼 클릭 이벤트 처리
             holder.btn_ai.setOnClickListener(v -> {
-                Log.d(TAG, "AI 비교 버튼이 클릭되었습니다, 위치: " + position);
-                // 보고서 정보 로깅
-                Log.d(TAG, "보고서 ID: " + board.getId());
-                Log.d(TAG, "보고서 제목: " + board.getTitle());
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    Board currentBoard = reportList.get(adapterPosition);
+                    Log.d(TAG, "AI 비교 버튼이 클릭되었습니다, 위치: " + adapterPosition);
+                    Log.d(TAG, "보고서 ID: " + currentBoard.getId());
+                    Log.d(TAG, "보고서 제목: " + currentBoard.getTitle());
 
-                ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
-                Call<MatchResult> call = service.findBestMatch(board.getId());
+                    ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
+                    Call<MatchResult> call = service.findBestMatch(currentBoard.getId());
 
-                call.enqueue(new Callback<MatchResult>() {
-                    @Override
-                    public void onResponse(Call<MatchResult> call, Response<MatchResult> response) {
-                        if (response.isSuccessful()) {
-                            MatchResult matchResult = response.body();
-                            if (matchResult != null) {
-                                // AI 비교 결과를 받아온 후 WrittenWitnessFragment로 전환
-                                Fragment fragment = WrittenWitnessFragment.newInstance(board.getId());
-                                getParentFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, fragment)
-                                        .addToBackStack(null)
-                                        .commit();
+                    call.enqueue(new Callback<MatchResult>() {
+                        @Override
+                        public void onResponse(Call<MatchResult> call, Response<MatchResult> response) {
+                            if (response.isSuccessful()) {
+                                MatchResult matchResult = response.body();
+                                if (matchResult != null) {
+                                    Fragment fragment = WrittenWitnessFragment.newInstance(currentBoard.getId());
+                                    getParentFragmentManager().beginTransaction()
+                                            .replace(R.id.fragment_container, fragment)
+                                            .addToBackStack(null)
+                                            .commit();
 
-                                // 유사도(maxSimilarity) 로깅
-                                double similarity = matchResult.getMaxSimilarity();
-                                DecimalFormat df = new DecimalFormat("0.00");
-                                String formattedSimilarity = df.format(similarity * 100); // 유사도를 백분율로 변환
-                                Toast.makeText(getContext(), "유사도: " + formattedSimilarity + "%", Toast.LENGTH_SHORT).show();
+                                    double similarity = matchResult.getMaxSimilarity();
+                                    DecimalFormat df = new DecimalFormat("0.00");
+                                    String formattedSimilarity = df.format(similarity * 100);
+                                    Toast.makeText(getContext(), "유사도: " + formattedSimilarity + "%", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.e(TAG, "AI 비교 결과가 null입니다.");
+                                }
                             } else {
-                                Log.e(TAG, "AI 비교 결과가 null입니다.");
+                                Log.e(TAG, "서버 응답이 실패했습니다: " + response.message());
                             }
-                        } else {
-                            Log.e(TAG, "서버 응답이 실패했습니다: " + response.message());
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<MatchResult> call, Throwable t) {
-                        Log.e(TAG, "AI 비교 요청이 실패했습니다", t);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<MatchResult> call, Throwable t) {
+                            Log.e(TAG, "AI 비교 요청이 실패했습니다", t);
+                        }
+                    });
+                }
             });
 
             // mtitle 버튼 클릭 이벤트 처리
             holder.mtitle.setOnClickListener(v -> {
-                // 해당 보고서의 ID를 가져와 WrittenMissingFragment로 전환
-                Fragment fragment = WrittenMissingFragment.newInstance(Long.parseLong(String.valueOf(board.getId())));
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit();
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    Board currentBoard = reportList.get(adapterPosition);
+                    Fragment fragment = WrittenMissingFragment.newInstance(currentBoard.getId());
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+
+            // 삭제 버튼 클릭 이벤트 처리
+            holder.delete_report.setOnClickListener(v -> {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    Board currentBoard = reportList.get(adapterPosition);
+                    ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
+                    Call<Void> call = service.deleteBoard(userId, currentBoard.getId());
+
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                reportList.remove(adapterPosition);
+                                notifyItemRemoved(adapterPosition);
+                                Toast.makeText(getContext(), "보고서가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e(TAG, "보고서 삭제 실패: " + response.message());
+                                Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e(TAG, "서버 요청 실패", t);
+                            Toast.makeText(getContext(), "서버 요청에 실패했습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             });
         }
 
@@ -178,11 +212,13 @@ public class ManageReportFragment extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder {
             Button mtitle;
             Button btn_ai; // AI 비교 버튼
+            Button delete_report; // 삭제 버튼
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 mtitle = itemView.findViewById(R.id.mtitle);
                 btn_ai = itemView.findViewById(R.id.btn_ai);
+                delete_report = itemView.findViewById(R.id.delete_report);
             }
         }
     }
