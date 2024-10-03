@@ -16,6 +16,7 @@ import com.kakao.sdk.user.UserApiClient;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,6 +66,7 @@ public class ManageReportFragment extends Fragment {
     }
 
     // 사용자가 작성한 게시글을 서버에서 가져오는 메서드
+    // 사용자가 작성한 게시글을 서버에서 가져오는 메서드
     private void fetchUserReports() {
         ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
         Call<List<Board>> call = service.getUserBoards(userId);
@@ -75,7 +77,11 @@ public class ManageReportFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<Board> userBoards = response.body();
                     if (userBoards != null) {
-                        reportList.addAll(userBoards);
+                        // 리스트의 맨 앞에 추가하는 대신, 역순으로 추가
+                        reportList.clear(); // 이전 데이터를 지웁니다.
+                        reportList.addAll(userBoards); // 서버에서 받아온 리스트를 추가합니다.
+                        // 리스트를 역순으로 정렬하여 최신 글이 위로 오도록 합니다.
+                        Collections.reverse(reportList);
                         adapter.notifyDataSetChanged();
                     } else {
                         Log.e(TAG, "응답 본문이 null입니다");
@@ -186,7 +192,7 @@ public class ManageReportFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 reportList.remove(adapterPosition);
                                 notifyItemRemoved(adapterPosition);
-                                Toast.makeText(getContext(), "보고서가 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                             } else {
                                 Log.e(TAG, "보고서 삭제 실패: " + response.message());
                                 Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
