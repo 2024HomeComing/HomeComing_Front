@@ -132,6 +132,15 @@
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical" />
 
+            <TextView
+                android:id="@+id/if_no_board"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오늘 올라온 게시글이 없습니다."
+                android:textSize="20dp"
+                android:layout_gravity="center">
+            </TextView>
+
         </LinearLayout>
 
 

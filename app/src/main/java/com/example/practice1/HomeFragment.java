@@ -122,6 +122,9 @@ public class HomeFragment extends Fragment {
                     }
 
                     postAdapter.notifyDataSetChanged(); // 어댑터에 데이터 변경 알림
+
+                    // 리사이클러뷰와 텍스트 뷰 가시성 설정
+                    updateRecyclerViewVisibility(postList.isEmpty());
                 } else {
                     Log.e("HomeFragment", "Failed to fetch all posts: " + response.message());
                 }
@@ -132,6 +135,19 @@ public class HomeFragment extends Fragment {
                 Log.e("HomeFragment", "Failed to fetch all posts", t);
             }
         });
+    }
+
+    // 리사이클러뷰와 텍스트 뷰의 가시성을 업데이트하는 메서드
+    private void updateRecyclerViewVisibility(boolean isEmpty) {
+        if (isEmpty) {
+            recyclerView.setVisibility(View.GONE); // 리사이클러뷰 숨기기
+            TextView ifNoBoardTextView = getView().findViewById(R.id.if_no_board);
+            ifNoBoardTextView.setVisibility(View.VISIBLE); // 텍스트 뷰 보이기
+        } else {
+            recyclerView.setVisibility(View.VISIBLE); // 리사이클러뷰 보이기
+            TextView ifNoBoardTextView = getView().findViewById(R.id.if_no_board);
+            ifNoBoardTextView.setVisibility(View.GONE); // 텍스트 뷰 숨기기
+        }
     }
 
     // 공통적으로 TextView를 업데이트하는 메서드
