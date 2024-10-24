@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.practice1.dto.Board;
 import com.example.practice1.dto.MatchResult;
+import com.example.practice1.dto.SightingBoard;
 import com.kakao.sdk.user.UserApiClient;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,7 +27,8 @@ public class ManageReportFragment extends Fragment {
     private static final String TAG = "ManageReportFragment";
     private RecyclerView recyclerView;
     private ReportAdapter adapter;
-    private List<Board> reportList;
+
+    List<Board> reportList;
     private String userId; // 사용자의 카카오 아이디
 
     @Override
@@ -66,7 +67,6 @@ public class ManageReportFragment extends Fragment {
     }
 
     // 사용자가 작성한 게시글을 서버에서 가져오는 메서드
-    // 사용자가 작성한 게시글을 서버에서 가져오는 메서드
     private void fetchUserReports() {
         ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
         Call<List<Board>> call = service.getUserBoards(userId);
@@ -77,11 +77,7 @@ public class ManageReportFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<Board> userBoards = response.body();
                     if (userBoards != null) {
-                        // 리스트의 맨 앞에 추가하는 대신, 역순으로 추가
-                        reportList.clear(); // 이전 데이터를 지웁니다.
-                        reportList.addAll(userBoards); // 서버에서 받아온 리스트를 추가합니다.
-                        // 리스트를 역순으로 정렬하여 최신 글이 위로 오도록 합니다.
-                        Collections.reverse(reportList);
+                        reportList.addAll(userBoards);
                         adapter.notifyDataSetChanged();
                     } else {
                         Log.e(TAG, "응답 본문이 null입니다");
@@ -122,16 +118,18 @@ public class ManageReportFragment extends Fragment {
             holder.mtitle.setText(title);
 
             // AI 비교 버튼 클릭 이벤트 처리
+            // AI 비교 버튼 클릭 이벤트 처리
             holder.btn_ai.setOnClickListener(v -> {
                 int adapterPosition = holder.getAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    Board currentBoard = reportList.get(adapterPosition);
+                    // 현재 아이템을 Board 객체로 가져옵니다.
+                    Board currentBoard = (Board) reportList.get(adapterPosition); // Board 객체로 캐스팅
                     Log.d(TAG, "AI 비교 버튼이 클릭되었습니다, 위치: " + adapterPosition);
-                    Log.d(TAG, "보고서 ID: " + currentBoard.getId());
-                    Log.d(TAG, "보고서 제목: " + currentBoard.getTitle());
+                    Log.d(TAG, "게시글 ID: " + currentBoard.getId());
+                    Log.d(TAG, "게시글 제목: " + currentBoard.getTitle()); // Board의 제목으로 수정
 
                     ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
-                    Call<MatchResult> call = service.findBestMatch(currentBoard.getId());
+                    Call<MatchResult> call = service.findBestMatch(currentBoard.getId()); // Board ID 사용
 
                     call.enqueue(new Callback<MatchResult>() {
                         @Override
@@ -139,12 +137,19 @@ public class ManageReportFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 MatchResult matchResult = response.body();
                                 if (matchResult != null) {
+                                    Log.d(TAG, "최고 유사도 게시글: " + matchResult.getBestSighting());
+
+                                    // 필요한 경우 SightingBoard를 사용하는 Fragment로 전환
                                     Fragment fragment = WrittenWitnessFragment.newInstance(currentBoard.getId());
                                     getParentFragmentManager().beginTransaction()
                                             .replace(R.id.fragment_container, fragment)
                                             .addToBackStack(null)
                                             .commit();
 
+                                    // 이동된 Fragment의 클래스 이름을 로그로 출력
+                                    Log.d(TAG, "이동된 Fragment: " + WrittenWitnessFragment.class.getSimpleName());
+
+                                    // 유사도 계산
                                     double similarity = matchResult.getMaxSimilarity();
                                     DecimalFormat df = new DecimalFormat("0.00");
                                     String formattedSimilarity = df.format(similarity * 100);
