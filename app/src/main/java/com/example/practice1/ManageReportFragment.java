@@ -15,7 +15,6 @@ import com.example.practice1.dto.MatchResult;
 import com.example.practice1.dto.SightingBoard;
 import com.kakao.sdk.user.UserApiClient;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -117,59 +116,6 @@ public class ManageReportFragment extends Fragment {
             }
             holder.mtitle.setText(title);
 
-            // AI 비교 버튼 클릭 이벤트 처리
-            // AI 비교 버튼 클릭 이벤트 처리
-            holder.btn_ai.setOnClickListener(v -> {
-                int adapterPosition = holder.getAdapterPosition();
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    // 현재 아이템을 Board 객체로 가져옵니다.
-                    Board currentBoard = (Board) reportList.get(adapterPosition); // Board 객체로 캐스팅
-                    Log.d(TAG, "AI 비교 버튼이 클릭되었습니다, 위치: " + adapterPosition);
-                    Log.d(TAG, "게시글 ID: " + currentBoard.getId());
-                    Log.d(TAG, "게시글 제목: " + currentBoard.getTitle()); // Board의 제목으로 수정
-
-                    ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
-                    Call<MatchResult> call = service.findBestMatch(currentBoard.getId()); // Board ID 사용
-
-                    call.enqueue(new Callback<MatchResult>() {
-                        @Override
-                        public void onResponse(Call<MatchResult> call, Response<MatchResult> response) {
-                            if (response.isSuccessful()) {
-                                MatchResult matchResult = response.body();
-                                if (matchResult != null) {
-                                    Log.d(TAG, "최고 유사도 게시글: " + matchResult.getBestSighting());
-
-                                    // 필요한 경우 SightingBoard를 사용하는 Fragment로 전환
-                                    Fragment fragment = WrittenWitnessFragment.newInstance(currentBoard.getId());
-                                    getParentFragmentManager().beginTransaction()
-                                            .replace(R.id.fragment_container, fragment)
-                                            .addToBackStack(null)
-                                            .commit();
-
-                                    // 이동된 Fragment의 클래스 이름을 로그로 출력
-                                    Log.d(TAG, "이동된 Fragment: " + WrittenWitnessFragment.class.getSimpleName());
-
-                                    // 유사도 계산
-                                    double similarity = matchResult.getMaxSimilarity();
-                                    DecimalFormat df = new DecimalFormat("0.00");
-                                    String formattedSimilarity = df.format(similarity * 100);
-                                    Toast.makeText(getContext(), "유사도: " + formattedSimilarity + "%", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.e(TAG, "AI 비교 결과가 null입니다.");
-                                }
-                            } else {
-                                Log.e(TAG, "서버 응답이 실패했습니다: " + response.message());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<MatchResult> call, Throwable t) {
-                            Log.e(TAG, "AI 비교 요청이 실패했습니다", t);
-                        }
-                    });
-                }
-            });
-
             // mtitle 버튼 클릭 이벤트 처리
             holder.mtitle.setOnClickListener(v -> {
                 int adapterPosition = holder.getAdapterPosition();
@@ -207,6 +153,58 @@ public class ManageReportFragment extends Fragment {
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
                             Log.e(TAG, "서버 요청 실패", t);
+                            Toast.makeText(getContext(), "서버 요청에 실패했습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+
+            // btn_ai 클릭 이벤트 처리 - findBestMatch API 호출
+            holder.btn_ai.setOnClickListener(v -> {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    Board currentBoard = reportList.get(adapterPosition);
+                    // findBestMatch API 호출
+                    ApiService service = RetrofitClientInstance.getRetrofitInstance().create(ApiService.class);
+                    Call<MatchResult> call = service.findBestMatch(currentBoard.getId());
+
+                    call.enqueue(new Callback<MatchResult>() {
+                        @Override
+                        public void onResponse(Call<MatchResult> call, Response<MatchResult> response) {
+                            if (response.isSuccessful()) {
+                                MatchResult matchResult = response.body();
+                                if (matchResult != null) {
+                                    SightingBoard bestSighting = matchResult.getBestSighting();
+                                    double similarity = matchResult.getMaxSimilarity();
+
+                                    Log.d(TAG, "Best Sighting ID: " + bestSighting.getwId());
+                                    Log.d(TAG, "Best Sighting Title: " + bestSighting.getwTitle());
+                                    Log.d(TAG, "Best Sighting Description: " + bestSighting.getwCharacteristics());
+                                    Log.d(TAG, "Max Similarity: " + similarity);
+
+                                    // 유사 게시물 정보와 유사도를 로그로 출력
+                                    Log.d(TAG, "Best Sighting: " + bestSighting.getId() + ", Similarity: " + similarity);
+
+                                    double similarityPercentage = similarity * 100;
+                                    Toast.makeText(getContext(), "유사도: " + String.format("%.2f", similarityPercentage) + "%", Toast.LENGTH_SHORT).show();
+
+                                    // WrittenWitnessFragment로 이동하면서 유사 게시물 정보를 전달
+                                    Fragment fragment = WrittenWitnessFragment.newInstance(bestSighting.getwId());
+                                    getParentFragmentManager().beginTransaction()
+                                            .replace(R.id.fragment_container, fragment)
+                                            .addToBackStack(null)
+                                            .commit();
+                                } else {
+                                    Log.e(TAG, "MatchResult 응답이 null입니다");
+                                }
+                            } else {
+                                Log.e(TAG, "findBestMatch API 호출 실패: " + response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MatchResult> call, Throwable t) {
+                            Log.e(TAG, "findBestMatch 서버 요청 실패", t);
                             Toast.makeText(getContext(), "서버 요청에 실패했습니다", Toast.LENGTH_SHORT).show();
                         }
                     });
