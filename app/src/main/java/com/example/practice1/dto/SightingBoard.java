@@ -6,7 +6,6 @@ public class SightingBoard {
     private String wbreed;
 
     private String wsize;
-
     private String wcolor;
     private String wcharacteristics;
     private String wlastSeenLocation;
@@ -15,7 +14,22 @@ public class SightingBoard {
     private String wadditionalInfo;
     private String wimageUrl;
 
-
+    @Override
+    public String toString() {
+        return "SightingBoard{" +
+                "id=" + id +
+                ", title='" + wtitle + '\'' +
+                ", breed='" + wbreed + '\'' +
+                ", size='" + wsize + '\'' +
+                ", color='" + wcolor + '\'' +
+                ", characteristics='" + wcharacteristics + '\'' +
+                ", lastSeenLocation='" + wlastSeenLocation + '\'' +
+                ", lastSeenTime='" + wlastSeenTime + '\'' +
+                ", contact='" + wcontact + '\'' +
+                ", additionalInfo='" + wadditionalInfo + '\'' +
+                ", imageUrl='" + wimageUrl + '\'' +
+                '}';
+    }
 
     public Long getwId() {
         return id;
